@@ -166,25 +166,35 @@
   }
 
   function postalCodeValue(id, label) {
-    const input = qs("#" + id);
-    const value = input
-      ? String(input.value || "").trim()
-      : "";
+  const input = qs("#" + id);
 
-    if (!/^[0-9]{2}-[0-9]{3}$/.test(value)) {
-      if (input) {
-        input.focus();
-      }
+  const digits = input
+    ? String(input.value || "")
+        .replace(/\D/g, "")
+        .slice(0, 5)
+    : "";
 
-      throw new Error(
-        "Podaj poprawny kod pocztowy w polu: " +
-        label +
-        "."
-      );
+  if (digits.length !== 5) {
+    if (input) {
+      input.focus();
     }
 
-    return value;
+    throw new Error(
+      "Kod pocztowy musi składać się z 5 cyfr."
+    );
   }
+
+  const formatted =
+    digits.slice(0, 2) +
+    "-" +
+    digits.slice(2);
+
+  if (input) {
+    input.value = formatted;
+  }
+
+  return formatted;
+}
 
   function addressPayload() {
     if (state.type === "plot") {
@@ -1497,17 +1507,48 @@ function prefillAddressFromHero() {
   );
 }
 
+function initPostalCodeFormatting() {
+  [
+    "postalCode",
+    "plotPostalCode"
+  ].forEach(function (id) {
+    const input = qs("#" + id);
+
+    if (!input) {
+      return;
+    }
+
+    input.addEventListener(
+      "input",
+      function () {
+        const digits = String(
+          input.value || ""
+        )
+          .replace(/\D/g, "")
+          .slice(0, 5);
+
+        input.value =
+          digits.length > 2
+            ? digits.slice(0, 2) +
+              "-" +
+              digits.slice(2)
+            : digits;
+      }
+    );
+  });
+}
+
   function init() {
     if (!qs("#calculatorForm")) {
       return;
     }
 
     try {
-      initTypeButtons();
-      prefillAddressFromHero();
-      initCalculator();
-      initLeadForm();
-      initVerifyForm();
+     initTypeButtons();
+    initPostalCodeFormatting();
+    initCalculator();
+    initLeadForm();
+    initVerifyForm();
 
       console.log(
         "Estymator LeadChecker został uruchomiony."
