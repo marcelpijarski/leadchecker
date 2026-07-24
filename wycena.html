@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>Document</title>
+
+  <meta
+    name="description"
+    content="Sprawdź orientacyjną wartość mieszkania, domu lub działki. Wypełnij formularz i odbierz bezpłatną estymację nieruchomości."
+  >
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+
+  
+</head>
+
+<body class="strona-wyceny">
+<header class="naglowek">
+
+        <nav class="nawigacja">
+<button class="hamburger" type="button" aria-label="Menu">
+<span></span>
+<span></span>
+<span></span>
+</button>
+             <a href="index.html" class="logo" aria-label="LeadChecker, strona główna">
+            <img src="assets/logo.webp" alt="LeadChecker">
+            </a>
+            <ul>
+                <li><a href="index.html">Strona główna</a></li>
+                <li><a href="wycena.html">Wycena</a></li>
+                <li><a href="agenci.html">Dla agentów</a></li>
+                <li><a href="index.html#opinie">Opinie</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    
+  <main>
+
+    <section class="wycena-wstep">
+      <div class="wycena-wstep-kontener">
+
+        <span class="wycena-etykieta">
+          Bezpłatna estymacja
+        </span>
+
+        <h1>
+          Sprawdź orientacyjną wartość swojej nieruchomości
+        </h1>
+
+        <p>
+          Uzupełnij podstawowe informacje o mieszkaniu, domu lub działce.
+          Po potwierdzeniu adresu email zgłoszenie zostanie przekazane
+          do zespołu LeadChecker.
+        </p>
+
+        <div class="wycena-zalety">
+          <span>Bez opłat</span>
+          <span>Bez zobowiązań</span>
+          <span>Potwierdzenie zgłoszenia email</span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="estimator" id="estymator">
+      <div class="estimator-kontener">
+
+        <aside class="estimator-informacje">
+
+          <span class="estimator-informacje-etykieta">
+            Jak to działa?
+          </span>
+
+          <h2>
+            Kilka informacji wystarczy, aby przygotować estymację
+          </h2>
+
+          <p>
+            Formularz dopasuje pola do wybranego rodzaju nieruchomości.
+            Podane informacje pozwolą przygotować wstępną analizę
+            i ułatwią zespołowi późniejszy kontakt.
+          </p>
+
+          <ol class="estimator-kroki">
+            <li>
+              <span>1</span>
+              <div>
+                <strong>Wybierz nieruchomość</strong>
+                <p>Mieszkanie, dom lub działka.</p>
+              </div>
+            </li>
+
+            <li>
+              <span>2</span>
+              <div>
+                <strong>Uzupełnij parametry</strong>
+                <p>Podaj lokalizację i najważniejsze cechy.</p>
+              </div>
+            </li>
+
+            <li>
+              <span>3</span>
+              <div>
+                <strong>Potwierdź email</strong>
+                <p>Wpisz otrzymany kod weryfikacyjny.</p>
+              </div>
+            </li>
+
+            <li>
+              <span>4</span>
+              <div>
+                <strong>Przekaż zgłoszenie</strong>
+                <p>Zespół LeadChecker otrzyma dane do analizy.</p>
+              </div>
+            </li>
+          </ol>
+
+          <div class="estimator-informacja-prawna">
+            Wynik ma charakter orientacyjny i nie stanowi operatu
+            szacunkowego ani wiążącej wyceny rzeczoznawcy.
+          </div>
+
+        </aside>
+
+        <div class="estimator-panel">
+
+          <div class="property-type" aria-label="Rodzaj nieruchomości">
+
+            <button
+              type="button"
+              id="apartmentBtn"
+              class="active"
+            >
+              Mieszkanie
+            </button>
+
+            <button
+              type="button"
+              id="houseBtn"
+            >
+              Dom
+            </button>
+
+            <button
+              type="button"
+              id="plotBtn"
+            >
+              Działka
+            </button>
+
+          </div>
+
+          <form id="calculatorForm" novalidate>
+
+            <div class="formularz-sekcja">
+
+              <div class="formularz-sekcja-naglowek">
+                <span class="numer-sekcji">01</span>
+
+                <div>
+                  <h2>Lokalizacja</h2>
+                  <p>
+                    Wybierz miasto z listy lub wpisz dowolną inną
+                    miejscowość.
+                  </p>
+                </div>
+              </div>
+
+              <div class="pole-formularza pole-pelne">
+                <label for="city">
+                  Miasto
+                  <span class="wymagane">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="city"
+                  name="Miasto"
+                  list="cityList"
+                  placeholder="Np. Warszawa"
+                  autocomplete="address-level2"
+                  required
+                >
+
+                <datalist id="cityList">
+                  <option value="Warszawa">
+                  <option value="Kraków">
+                  <option value="Wrocław">
+                  <option value="Poznań">
+                  <option value="Gdańsk">
+                  <option value="Gdynia">
+                  <option value="Sopot">
+                  <option value="Łódź">
+                  <option value="Katowice">
+                  <option value="Lublin">
+                  <option value="Szczecin">
+                  <option value="Bydgoszcz">
+                  <option value="Białystok">
+                  <option value="Rzeszów">
+                  <option value="Radom">
+                  <option value="Toruń">
+                  <option value="Kielce">
+                  <option value="Olsztyn">
+                  <option value="Opole">
+                  <option value="Zielona Góra">
+                  <option value="Gliwice">
+                  <option value="Zabrze">
+                  <option value="Częstochowa">
+                  <option value="Bielsko-Biała">
+                  <option value="Płock">
+                  <option value="Koszalin">
+                  <option value="Legnica">
+                  <option value="Wałbrzych">
+                  <option value="Elbląg">
+                  <option value="Gorzów Wielkopolski">
+                </datalist>
+
+                <small>
+                  Brak miasta na liście nie blokuje wykonania estymacji.
+                </small>
+              </div>
+
+              <div id="buildingAddressFields">
+
+                <h3 class="formularz-podtytul formularz-podtytul-mniejszy">
+                  Adres mieszkania lub domu
+                </h3>
+
+                <div class="pola-siatka">
+
+                  <div class="pole-formularza pole-pelne">
+                    <label for="street">
+                      Ulica
+                      <span class="wymagane">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      id="street"
+                      name="Ulica"
+                      placeholder="Np. Marszałkowska"
+                      autocomplete="address-line1"
+                      minlength="2"
+                      required
+                    >
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="buildingNumber">
+                      Numer budynku
+                      <span class="wymagane">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      id="buildingNumber"
+                      name="Numer budynku"
+                      placeholder="Np. 12A"
+                      maxlength="20"
+                      required
+                    >
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="apartmentNumber">
+                      Numer lokalu
+                    </label>
+
+                    <input
+                      type="text"
+                      id="apartmentNumber"
+                      name="Numer lokalu"
+                      placeholder="Opcjonalnie"
+                      autocomplete="address-line2"
+                      maxlength="20"
+                    >
+                  </div>
+
+                  <div class="pole-formularza pole-pelne">
+                    <label for="postalCode">
+                      Kod pocztowy
+                      <span class="wymagane">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      id="postalCode"
+                      name="Kod pocztowy"
+                      placeholder="00-000"
+                      autocomplete="postal-code"
+                      inputmode="numeric"
+                      maxlength="6"
+                      required
+                    >
+                  </div>
+
+                </div>
+              </div>
+
+              <div id="plotAddressFields">
+
+                <h3 class="formularz-podtytul formularz-podtytul-mniejszy">
+                  Adres działki
+                </h3>
+
+                <div class="pola-siatka">
+
+                  <div class="pole-formularza pole-pelne">
+                    <label for="plotStreet">
+                      Ulica działki
+                    </label>
+
+                    <input
+                      type="text"
+                      id="plotStreet"
+                      name="Ulica działki"
+                      placeholder="Opcjonalnie, jeśli działka ma przypisaną ulicę"
+                      maxlength="160"
+                    >
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="plotNumber">
+                      Numer działki
+                      <span class="wymagane">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      id="plotNumber"
+                      name="Numer działki"
+                      placeholder="Np. 125/4"
+                      maxlength="80"
+                      required
+                    >
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="plotPostalCode">
+                      Kod pocztowy działki
+                      <span class="wymagane">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      id="plotPostalCode"
+                      name="Kod pocztowy działki"
+                      placeholder="00-000"
+                      inputmode="numeric"
+                      maxlength="6"
+                      required
+                    >
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="formularz-sekcja">
+
+              <div class="formularz-sekcja-naglowek">
+                <span class="numer-sekcji">02</span>
+
+                <div>
+                  <h2>Parametry nieruchomości</h2>
+                  <p>
+                    Pola zmieniają się zależnie od wybranego rodzaju
+                    nieruchomości.
+                  </p>
+                </div>
+              </div>
+
+              <div id="apartmentFields">
+
+                <h3 class="formularz-podtytul">
+                  Informacje o mieszkaniu
+                </h3>
+
+                <div class="pola-siatka">
+
+                  <div class="pole-formularza">
+                    <label for="rooms">Liczba pokoi</label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('rooms', -1)"
+                        aria-label="Zmniejsz liczbę pokoi"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="rooms"
+                        name="Liczba pokoi"
+                        min="1"
+                        max="30"
+                        step="1"
+                        value="2"
+                        inputmode="numeric"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('rooms', 1)"
+                        aria-label="Zwiększ liczbę pokoi"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="area">Metraż w m²</label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('area', -1)"
+                        aria-label="Zmniejsz metraż"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="area"
+                        name="Metraż"
+                        min="10"
+                        max="2000"
+                        step="1"
+                        value="40"
+                        inputmode="decimal"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('area', 1)"
+                        aria-label="Zwiększ metraż"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="floor">Piętro</label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('floor', -1)"
+                        aria-label="Zmniejsz piętro"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="floor"
+                        name="Piętro"
+                        min="0"
+                        max="100"
+                        step="1"
+                        value="1"
+                        inputmode="numeric"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('floor', 1)"
+                        aria-label="Zwiększ piętro"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="buildingFloors">
+                      Liczba pięter budynku
+                    </label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('buildingFloors', -1)"
+                        aria-label="Zmniejsz liczbę pięter"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="buildingFloors"
+                        name="Liczba pięter budynku"
+                        min="1"
+                        max="100"
+                        step="1"
+                        value="5"
+                        inputmode="numeric"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('buildingFloors', 1)"
+                        aria-label="Zwiększ liczbę pięter"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div id="houseFields">
+
+                <h3 class="formularz-podtytul">
+                  Informacje o domu
+                </h3>
+
+                <div class="pola-siatka">
+
+                  <div class="pole-formularza">
+                    <label for="houseRooms">Liczba pokoi</label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('houseRooms', -1)"
+                        aria-label="Zmniejsz liczbę pokoi"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="houseRooms"
+                        name="Liczba pokoi w domu"
+                        min="1"
+                        max="50"
+                        step="1"
+                        value="3"
+                        inputmode="numeric"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('houseRooms', 1)"
+                        aria-label="Zwiększ liczbę pokoi"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="houseArea">Metraż domu w m²</label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('houseArea', -1)"
+                        aria-label="Zmniejsz metraż domu"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="houseArea"
+                        name="Metraż domu"
+                        min="20"
+                        max="5000"
+                        step="1"
+                        value="80"
+                        inputmode="decimal"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('houseArea', 1)"
+                        aria-label="Zwiększ metraż domu"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="plot">
+                      Powierzchnia działki w m²
+                    </label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('plot', -10)"
+                        aria-label="Zmniejsz powierzchnię działki"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="plot"
+                        name="Powierzchnia działki przy domu"
+                        min="0"
+                        max="1000000"
+                        step="10"
+                        value="500"
+                        inputmode="decimal"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('plot', 10)"
+                        aria-label="Zwiększ powierzchnię działki"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="houseFloors">
+                      Liczba kondygnacji
+                    </label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('houseFloors', -1)"
+                        aria-label="Zmniejsz liczbę kondygnacji"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="houseFloors"
+                        name="Liczba kondygnacji domu"
+                        min="1"
+                        max="10"
+                        step="1"
+                        value="1"
+                        inputmode="numeric"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('houseFloors', 1)"
+                        aria-label="Zwiększ liczbę kondygnacji"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div id="plotFields">
+
+                <h3 class="formularz-podtytul">
+                  Informacje o działce
+                </h3>
+
+                <div class="pola-siatka">
+
+                  <div class="pole-formularza">
+                    <label for="plotArea">
+                      Powierzchnia działki w m²
+                    </label>
+
+                    <div class="counter">
+                      <button
+                        type="button"
+                        onclick="changeValue('plotArea', -10)"
+                        aria-label="Zmniejsz powierzchnię działki"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="plotArea"
+                        name="Powierzchnia działki"
+                        min="1"
+                        max="10000000"
+                        step="10"
+                        value="1000"
+                        inputmode="decimal"
+                      >
+
+                      <button
+                        type="button"
+                        onclick="changeValue('plotArea', 10)"
+                        aria-label="Zwiększ powierzchnię działki"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="pole-formularza">
+                    <label for="plotType">
+                      Rodzaj działki
+                    </label>
+
+                    <select id="plotType" name="Rodzaj działki">
+                      <option value="building">Budowlana</option>
+                      <option value="agricultural">Rolna</option>
+                      <option value="recreational">Rekreacyjna</option>
+                      <option value="investment">Inwestycyjna</option>
+                      <option value="forest">Leśna</option>
+                      <option value="other">Inna</option>
+                    </select>
+                  </div>
+
+                  <div class="pole-formularza pole-pelne">
+                    <label for="plotRoad">
+                      Dostęp do drogi
+                    </label>
+
+                    <select id="plotRoad" name="Dostęp do drogi">
+                      <option value="asphalt">
+                        Droga asfaltowa
+                      </option>
+
+                      <option value="paved">
+                        Droga utwardzona
+                      </option>
+
+                      <option value="dirt">
+                        Droga gruntowa
+                      </option>
+
+                      <option value="none">
+                        Brak bezpośredniego dostępu
+                      </option>
+                    </select>
+                  </div>
+
+                </div>
+
+                <h3 class="formularz-podtytul formularz-podtytul-mniejszy">
+                  Dostępne media
+                </h3>
+
+                <div class="opcje-siatka">
+
+                  <label class="opcja-karta">
+                    <input
+                      class="plotUtility"
+                      type="checkbox"
+                      value="Prąd"
+                    >
+                    <span>Prąd</span>
+                  </label>
+
+                  <label class="opcja-karta">
+                    <input
+                      class="plotUtility"
+                      type="checkbox"
+                      value="Woda"
+                    >
+                    <span>Woda</span>
+                  </label>
+
+                  <label class="opcja-karta">
+                    <input
+                      class="plotUtility"
+                      type="checkbox"
+                      value="Kanalizacja"
+                    >
+                    <span>Kanalizacja</span>
+                  </label>
+
+                  <label class="opcja-karta">
+                    <input
+                      class="plotUtility"
+                      type="checkbox"
+                      value="Gaz"
+                    >
+                    <span>Gaz</span>
+                  </label>
+
+                  <label class="opcja-karta opcja-pelna">
+                    <input
+                      type="checkbox"
+                      id="plotPlan"
+                      name="Plan miejscowy"
+                      value="Tak"
+                    >
+                    <span>
+                      Działka jest objęta miejscowym planem
+                      zagospodarowania przestrzennego
+                    </span>
+                  </label>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="formularz-sekcja" id="buildingDetails">
+
+              <div class="formularz-sekcja-naglowek">
+                <span class="numer-sekcji">03</span>
+
+                <div>
+                  <h2>Stan nieruchomości</h2>
+                  <p>
+                    Rok budowy i standard pomagają lepiej dopasować
+                    orientacyjną wartość.
+                  </p>
+                </div>
+              </div>
+
+              <div class="pola-siatka">
+
+                <div class="pole-formularza">
+                  <label for="year">
+                    Rok budowy
+                  </label>
+
+                  <input
+                    type="number"
+                    id="year"
+                    name="Rok budowy"
+                    min="1800"
+                    max="2100"
+                    step="1"
+                    value="1990"
+                    inputmode="numeric"
+                  >
+                </div>
+
+                <div class="pole-formularza">
+                  <label for="standard">
+                    Standard
+                  </label>
+
+                  <select id="standard" name="Standard">
+                    <option value="0.9">Do remontu</option>
+                    <option value="1" selected>Średni</option>
+                    <option value="1.1">Wysoki</option>
+                    <option value="1.2">Premium</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <h3 class="formularz-podtytul formularz-podtytul-mniejszy">
+                Dodatkowe cechy
+              </h3>
+
+              <div class="opcje-siatka">
+
+                <label class="opcja-karta">
+                  <input
+                    class="extra"
+                    type="checkbox"
+                    value="piwnica"
+                  >
+                  <span>Piwnica lub komórka</span>
+                </label>
+
+                <label class="opcja-karta">
+                  <input
+                    class="extra"
+                    type="checkbox"
+                    value="parking"
+                  >
+                  <span>Miejsce postojowe</span>
+                </label>
+
+                <label class="opcja-karta">
+                  <input
+                    class="extra"
+                    type="checkbox"
+                    value="ogrod"
+                  >
+                  <span>Ogród</span>
+                </label>
+
+                <label class="opcja-karta">
+                  <input
+                    class="extra"
+                    type="checkbox"
+                    value="balkon"
+                  >
+                  <span>Balkon lub taras</span>
+                </label>
+
+              </div>
+            </div>
+
+            <div class="formularz-sekcja">
+
+              <div class="formularz-sekcja-naglowek">
+                <span class="numer-sekcji">04</span>
+
+                <div>
+                  <h2>Cel wykonania wyceny</h2>
+                  <p>
+                    Odpowiedź nie wpływa na obliczoną wartość
+                    nieruchomości.
+                  </p>
+                </div>
+              </div>
+
+              <div class="radio-lista">
+
+                <label class="radio-karta">
+                  <input
+                    type="radio"
+                    name="reason"
+                    value="ciekawosc"
+                    required
+                  >
+
+                  <span>
+                    <strong>Sprawdzam z ciekawości</strong>
+                    <small>
+                      Chcę poznać aktualną, orientacyjną wartość.
+                    </small>
+                  </span>
+                </label>
+
+                <label class="radio-karta">
+                  <input
+                    type="radio"
+                    name="reason"
+                    value="sprzedaz"
+                  >
+
+                  <span>
+                    <strong>Planuję sprzedaż</strong>
+                    <small>
+                      Rozważam sprzedaż teraz lub w najbliższym czasie.
+                    </small>
+                  </span>
+                </label>
+
+                <label class="radio-karta">
+                  <input
+                    type="radio"
+                    name="reason"
+                    value="agent"
+                  >
+
+                  <span>
+                    <strong>Jestem agentem nieruchomości</strong>
+                    <small>
+                      Sprawdzam wartość dla klienta lub przygotowywanej
+                      oferty.
+                    </small>
+                  </span>
+                </label>
+
+              </div>
+            </div>
+
+            <button class="przycisk-estymatora" type="submit">
+              Oblicz i przejdź dalej
+            </button>
+
+          </form>
+
+          <section
+            id="result"
+            class="wynik-estymatora hidden"
+            aria-live="polite"
+          >
+
+            <div class="wynik-estymatora-naglowek">
+              <span>Analiza przygotowana</span>
+              <h2>Dokończ zgłoszenie</h2>
+            </div>
+
+            <div id="price" class="wynik-cena">
+              <h3>Analiza została przygotowana</h3>
+
+              <p>
+                Podaj dane kontaktowe i potwierdź adres email,
+                aby przekazać zgłoszenie do zespołu LeadChecker.
+              </p>
+            </div>
+
+            <form id="leadForm" class="formularz-kontaktowy-wycena">
+
+              <div class="formularz-kontaktowy-naglowek">
+                <h3>Dane kontaktowe</h3>
+
+                <p>
+                  Na podany adres wyślemy sześciocyfrowy kod
+                  potwierdzający.
+                </p>
+              </div>
+
+              <div class="pola-siatka">
+
+                <div class="pole-formularza">
+                  <label for="name">
+                    Imię i nazwisko
+                    <span class="wymagane">*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    id="name"
+                    name="Imię i nazwisko"
+                    placeholder="Jan Kowalski"
+                    autocomplete="name"
+                    minlength="2"
+                    required
+                  >
+                </div>
+
+                <div class="pole-formularza">
+                  <label for="email">
+                    Adres email
+                    <span class="wymagane">*</span>
+                  </label>
+
+                  <input
+                    type="email"
+                    id="email"
+                    name="Email"
+                    placeholder="jan@przyklad.pl"
+                    autocomplete="email"
+                    required
+                  >
+                </div>
+
+                <div class="pole-formularza pole-pelne">
+                  <label for="phone">
+                    Numer telefonu
+                    <span class="wymagane">*</span>
+                  </label>
+
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="Telefon"
+                    placeholder="+48 500 000 000"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    minlength="9"
+                    required
+                  >
+                </div>
+
+              </div>
+
+              <div class="preferencje-wyceny">
+
+                <h3>Co jest dla Ciebie najważniejsze?</h3>
+
+                <p>
+                  Możesz zaznaczyć kilka odpowiedzi.
+                </p>
+
+                <div class="opcje-siatka">
+
+                  <label class="opcja-karta">
+                    <input
+                      class="preference"
+                      type="checkbox"
+                      value="Najwyższa możliwa cena"
+                    >
+                    <span>Najwyższa możliwa cena sprzedaży</span>
+                  </label>
+
+                  <label class="opcja-karta">
+                    <input
+                      class="preference"
+                      type="checkbox"
+                      value="Szybka sprzedaż"
+                    >
+                    <span>Szybka sprzedaż</span>
+                  </label>
+
+                  <label class="opcja-karta">
+                    <input
+                      class="preference"
+                      type="checkbox"
+                      value="Zdjęcia z drona"
+                    >
+                    <span>Zdjęcia z drona</span>
+                  </label>
+
+                  <label class="opcja-karta">
+                    <input
+                      class="preference"
+                      type="checkbox"
+                      value="Home staging"
+                    >
+                    <span>Home staging</span>
+                  </label>
+
+                  <label class="opcja-karta opcja-pelna">
+                    <input
+                      class="preference"
+                      type="checkbox"
+                      value="Pomoc w dokumentach"
+                    >
+                    <span>Pomoc w dokumentach i formalnościach</span>
+                  </label>
+
+                </div>
+              </div>
+
+              <label class="zgoda-wycena">
+                <input
+                  type="checkbox"
+                  name="Zgoda na kontakt"
+                  value="Wyrażona"
+                  required
+                >
+
+                <span>
+                  Wyrażam zgodę na kontakt dotyczący zgłoszenia
+                  i potwierdzam zapoznanie się z
+                  <a href="/polityka-prywatnosci/">
+                    polityką prywatności
+                  </a>.
+                </span>
+              </label>
+
+              <button class="przycisk-estymatora" type="submit">
+                Wyślij kod weryfikacyjny
+              </button>
+
+            </form>
+
+            <div id="codeBox" class="kod-weryfikacyjny hidden">
+
+              <div class="kod-weryfikacyjny-naglowek">
+                <span>Kod został wysłany</span>
+                <h2>Potwierdź swój adres email</h2>
+
+                <p>
+                  Wpisz sześciocyfrowy kod przesłany na podany adres.
+                  Kod jest ważny przez 10 minut.
+                </p>
+              </div>
+
+              <form id="verifyForm">
+
+                <div class="pole-formularza">
+                  <label for="verifyCode">
+                    Kod weryfikacyjny
+                  </label>
+
+                  <input
+                    type="text"
+                    id="verifyCode"
+                    name="Kod weryfikacyjny"
+                    placeholder="000000"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    pattern="[0-9]{6}"
+                    minlength="6"
+                    maxlength="6"
+                    required
+                  >
+                </div>
+
+                <button class="przycisk-estymatora" type="submit">
+                  Potwierdź kod i wyślij zgłoszenie
+                </button>
+
+              </form>
+
+            </div>
+
+          </section>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="wycena-dolna-informacja">
+      <div>
+        <h2>Wycena ma charakter orientacyjny</h2>
+
+        <p>
+          Wartość nieruchomości zależy również od jej dokładnego położenia,
+          stanu technicznego, układu pomieszczeń, otoczenia oraz aktualnej
+          sytuacji na lokalnym rynku. Dokładniejsza analiza może wymagać
+          rozmowy ze specjalistą.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="stopka">
+  <div class="stopka-kontener">
+
+    <div class="stopka-marka">
+      <a href="index.html" class="stopka-logo" aria-label="LeadChecker, strona główna">
+        LeadChecker
+      </a>
+
+      <p>
+        Sprawdź orientacyjną wartość swojej nieruchomości szybko,
+        bezpłatnie i bez zobowiązań.
+      </p>
+    </div>
+
+    <nav class="stopka-nawigacja" aria-label="Nawigacja w stopce">
+      <h2>Nawigacja</h2>
+
+      <ul>
+                <li><a href="index.html">Strona główna</a></li>
+                <li><a href="wycena.html">Wycena</a></li>
+                <li><a href="agenci.html">Dla agentów</a></li>
+                <li><a href="index.html#opinie">Opinie</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </nav>
+
+    <div class="stopka-kontakt">
+      <h2>Kontakt</h2>
+
+      <ul>
+        <li>
+          <a href="mailto:kontakt@leadchecker.pl">
+            kontakt@leadchecker.pl
+          </a>
+        </li>
+
+        <li>
+          <a href="tel:+48123456789">
+            +48 123 456 789
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="stopka-sociale">
+      <h2>Obserwuj nas</h2>
+
+      <div class="stopka-ikony">
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Facebook"
+        >
+          <img src="assets/ikonki/brand-facebook.svg" alt="">
+        </a>
+
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+        >
+          <img src="assets/ikonki/brand-instagram.svg" alt="">
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="stopka-dol">
+    <p>
+      © <span id="rok">2026</span> LeadChecker. Wszelkie prawa zastrzeżone. Realizacja:<span class="podpisek"><a href="https://marcelpijarski.pl">Marcel Pijarski</a></span>
+    </p>
+
+    <div class="stopka-dokumenty">
+      <a href="polityka-prywatnosci.html">Polityka prywatności</a>
+      <a href="regulamin.html">Regulamin</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="estymator.js?v=8"></script>
+</body>
+</html>

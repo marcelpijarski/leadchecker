@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Kontakt | LeadChecker</title>
+
+  <meta
+    name="description"
+    content="Skontaktuj się z zespołem LeadChecker. Odpowiadamy na pytania dotyczące wyceny nieruchomości i współpracy."
+  >
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="strona-kontakt">
+
+  <header class="naglowek">
+
+    <nav class="nawigacja">
+
+      <button
+        class="hamburger"
+        type="button"
+        aria-label="Otwórz menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <a
+        href="index.html"
+        class="logo"
+        aria-label="LeadChecker, strona główna"
+      >
+        <img src="assets/logo.webp" alt="LeadChecker">
+      </a>
+
+      <ul>
+        <li><a href="index.html">Strona główna</a></li>
+        <li><a href="wycena.html">Wycena</a></li>
+        <li><a href="agenci.html">Dla agentów</a></li>
+        <li><a href="index.html#opinie">Opinie</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="kontakt.html" aria-current="page">Kontakt</a></li>
+      </ul>
+
+    </nav>
+
+  </header>
+
+  <main>
+
+    <section class="kontakt-hero">
+
+      <div class="kontakt-hero-kontener">
+
+        <span class="kontakt-etykieta">
+          Skontaktuj się z nami
+        </span>
+
+        <h1>
+          Masz pytania? Napisz do zespołu LeadChecker
+        </h1>
+
+        <p>
+          Skorzystaj z formularza kontaktowego. Zwykle odpowiadamy
+          w ciągu 24 godzin w dni robocze.
+        </p>
+
+      </div>
+
+    </section>
+
+    <section class="kontakt-sekcja">
+
+      <div class="kontakt-kontener">
+
+        <aside class="kontakt-informacje">
+
+          <span class="kontakt-informacje-etykieta">
+            Kontakt
+          </span>
+
+          <h2>
+            Porozmawiajmy o Twojej nieruchomości
+          </h2>
+
+          <p>
+            Napisz do nas w sprawie estymacji, sprzedaży nieruchomości
+            albo współpracy z LeadChecker.
+          </p>
+
+          <div class="kontakt-dane">
+
+            <div class="kontakt-dane-element">
+
+              <span class="kontakt-ikona" aria-hidden="true">
+                <img src="assets/ikonki/mail-check.svg" alt="">
+              </span>
+
+              <div>
+                <strong>Adres email</strong>
+
+                <a href="mailto:kontakt@leadchecker.pl">
+                  kontakt@leadchecker.pl
+                </a>
+              </div>
+
+            </div>
+
+            <div class="kontakt-dane-element">
+
+              <span class="kontakt-ikona" aria-hidden="true">
+                <img src="assets/ikonki/phone-call.svg" alt="">
+              </span>
+
+              <div>
+                <strong>Numer telefonu</strong>
+
+                <a href="tel:+48123456789">
+                  +48 123 456 789
+                </a>
+              </div>
+
+            </div>
+
+            <div class="kontakt-dane-element">
+
+              <span class="kontakt-ikona" aria-hidden="true">
+                <img src="assets/ikonki/hourglass-empty.svg" alt="">
+              </span>
+
+              <div>
+                <strong>Czas odpowiedzi</strong>
+                <p>Zwykle do 24 godzin w dni robocze</p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="kontakt-wycena">
+
+            <h3>Chcesz poznać wartość nieruchomości?</h3>
+
+            <p>
+              Skorzystaj z bezpłatnego estymatora LeadChecker.
+            </p>
+
+            <a href="wycena.html">
+              Przejdź do estymatora
+            </a>
+
+          </div>
+
+        </aside>
+
+        <div class="kontakt-formularz-karta">
+
+          <div class="kontakt-formularz-naglowek">
+
+            <span>Formularz kontaktowy</span>
+
+            <h2>Napisz wiadomość</h2>
+
+            <p>
+              Uzupełnij pola, a wiadomość trafi bezpośrednio
+              do zespołu LeadChecker.
+            </p>
+
+          </div>
+
+          <form
+            class="kontakt-formularz"
+            action="https://formsubmit.co/kontakt@leadchecker.pl"
+            method="POST"
+          >
+
+            <input
+              type="hidden"
+              name="_subject"
+              value="Nowa wiadomość z formularza LeadChecker"
+            >
+
+            <input
+              type="hidden"
+              name="_template"
+              value="table"
+            >
+
+            <input
+              type="hidden"
+              name="_next"
+              value="https://leadchecker.pl/dziekujemy.html"
+            >
+
+            <input
+              type="hidden"
+              name="_autoresponse"
+              value="Dziękujemy za kontakt z LeadChecker. Otrzymaliśmy Twoją wiadomość i odpowiemy możliwie szybko."
+            >
+
+            <input
+              type="text"
+              name="_honey"
+              class="kontakt-pulapka"
+              tabindex="-1"
+              autocomplete="off"
+            >
+
+            <div class="kontakt-pola-siatka">
+
+              <div class="kontakt-pole">
+
+                <label for="kontakt-imie">
+                  Imię i nazwisko
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="kontakt-imie"
+                  name="Imię i nazwisko"
+                  placeholder="Jan Kowalski"
+                  autocomplete="name"
+                  minlength="2"
+                  required
+                >
+
+              </div>
+
+              <div class="kontakt-pole">
+
+                <label for="kontakt-email">
+                  Adres email
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="email"
+                  id="kontakt-email"
+                  name="email"
+                  placeholder="jan@przyklad.pl"
+                  autocomplete="email"
+                  required
+                >
+
+              </div>
+
+              <div class="kontakt-pole">
+
+                <label for="kontakt-telefon">
+                  Numer telefonu
+                </label>
+
+                <input
+                  type="tel"
+                  id="kontakt-telefon"
+                  name="Numer telefonu"
+                  placeholder="+48 500 000 000"
+                  autocomplete="tel"
+                  inputmode="tel"
+                >
+
+              </div>
+
+              <div class="kontakt-pole">
+
+                <label for="kontakt-temat">
+                  Temat wiadomości
+                  <span>*</span>
+                </label>
+
+                <select
+                  id="kontakt-temat"
+                  name="Temat wiadomości"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Wybierz temat
+                  </option>
+
+                  <option value="Pytanie o estymację">
+                    Pytanie o estymację
+                  </option>
+
+                  <option value="Sprzedaż nieruchomości">
+                    Sprzedaż nieruchomości
+                  </option>
+
+                  <option value="Współpraca dla agentów">
+                    Współpraca dla agentów
+                  </option>
+
+                  <option value="Problem techniczny">
+                    Problem techniczny
+                  </option>
+
+                  <option value="Inna sprawa">
+                    Inna sprawa
+                  </option>
+                </select>
+
+              </div>
+
+              <div class="kontakt-pole kontakt-pole-pelne">
+
+                <label for="kontakt-wiadomosc">
+                  Wiadomość
+                  <span>*</span>
+                </label>
+
+                <textarea
+                  id="kontakt-wiadomosc"
+                  name="Wiadomość"
+                  rows="7"
+                  placeholder="Opisz, w czym możemy Ci pomóc..."
+                  minlength="10"
+                  required
+                ></textarea>
+
+              </div>
+
+            </div>
+
+            <label class="kontakt-zgoda">
+
+              <input
+                type="checkbox"
+                name="Zgoda na kontakt"
+                value="Wyrażona"
+                required
+              >
+
+              <span>
+                Wyrażam zgodę na kontakt w sprawie przesłanej wiadomości
+                i potwierdzam zapoznanie się z
+                <a href="polityka-prywatnosci.html">
+                  polityką prywatności
+                </a>.
+              </span>
+
+            </label>
+
+            <button
+              class="kontakt-przycisk"
+              type="submit"
+            >
+              Wyślij wiadomość
+            </button>
+
+            <p class="kontakt-formularz-informacja">
+              Pola oznaczone gwiazdką są wymagane.
+            </p>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="stopka">
+
+    <div class="stopka-kontener">
+
+      <div class="stopka-marka">
+
+        <a
+          href="index.html"
+          class="stopka-logo"
+          aria-label="LeadChecker, strona główna"
+        >
+          LeadChecker
+        </a>
+
+        <p>
+          Sprawdź orientacyjną wartość swojej nieruchomości szybko,
+          bezpłatnie i bez zobowiązań.
+        </p>
+
+      </div>
+
+      <nav
+        class="stopka-nawigacja"
+        aria-label="Nawigacja w stopce"
+      >
+
+        <h2>Nawigacja</h2>
+
+        <ul>
+          <li><a href="index.html">Strona główna</a></li>
+          <li><a href="wycena.html">Wycena</a></li>
+          <li><a href="agenci.html">Dla agentów</a></li>
+          <li><a href="index.html#opinie">Opinie</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+
+      </nav>
+
+      <div class="stopka-kontakt">
+
+        <h2>Kontakt</h2>
+
+        <ul>
+
+          <li>
+            <a href="mailto:kontakt@leadchecker.pl">
+              kontakt@leadchecker.pl
+            </a>
+          </li>
+
+          <li>
+            <a href="tel:+48123456789">
+              +48 123 456 789
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+
+      <div class="stopka-sociale">
+
+        <h2>Obserwuj nas</h2>
+
+        <div class="stopka-ikony">
+
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+          >
+            <img
+              src="assets/ikonki/brand-facebook.svg"
+              alt=""
+            >
+          </a>
+
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <img
+              src="assets/ikonki/brand-instagram.svg"
+              alt=""
+            >
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="stopka-dol">
+
+      <p>
+        © <span id="rok">2026</span> LeadChecker.
+        Wszelkie prawa zastrzeżone.
+        Realizacja:
+        <span class="podpisek">
+          <a href="https://marcelpijarski.pl">
+            Marcel Pijarski
+          </a>
+        </span>
+      </p>
+
+      <div class="stopka-dokumenty">
+        <a href="polityka-prywatnosci.html">
+          Polityka prywatności
+        </a>
+
+        <a href="regulamin.html">
+          Regulamin
+        </a>
+      </div>
+
+    </div>
+
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

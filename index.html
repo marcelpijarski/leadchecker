@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="naglowek">
+
+        <nav class="nawigacja">
+<button class="hamburger" type="button" aria-label="Menu">
+<span></span>
+<span></span>
+<span></span>
+</button>
+             <a href="index.html" class="logo" aria-label="LeadChecker, strona główna">
+            <img src="assets/logo.webp" alt="LeadChecker">
+            </a>
+            <ul>
+                <li><a href="index.html">Strona główna</a></li>
+                <li><a href="wycena.html">Wycena</a></li>
+                <li><a href="agenci.html">Dla agentów</a></li>
+                <li><a href="index.html#opinie">Opinie</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    
+<main>
+    <section class="hero" id="start">
+        <div class="hero-tlo">
+            <div class="hero-kontener">
+                <div class="karta-wyceny">
+                    <span class="karta-etykieta">Bezpłatna wycena nieruchomości</span>
+
+                    <h1>Sprawdź orientacyjna wartość swojej nieruchomości</h1>
+
+                    <p>Wpisz adres, a następnie uzupełnij podstawowe informacje
+                      o nieruchomości i prześlij zgłoszenie do analizy.</p>
+
+                     <form class="formularz-adresu" id="formularzAdresu">
+                    <label for="adresNieruchomosci">
+                        Adres nieruchomości
+                    </label>
+
+                    <div class="pole-adresu">
+                        <input
+                        type="text"
+                        id="adresNieruchomosci"
+                        name="adres"
+                        placeholder="Np. Warszawa, ul. Marszałkowska 10"
+                        autocomplete="street-address"
+                        required
+                        >
+
+                        <span class="ikona-lokalizacji" aria-hidden="true">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M20 10c0 4.4-5 9-8 11-3-2-8-6.6-8-11a8 8 0 1 1 16 0"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        </span>
+                    </div>
+
+                    <p class="blad-adresu" id="bladAdresu" aria-live="polite"></p>
+
+                    <button type="submit" class="przycisk-wyceny" > 
+                        Przejdź do estymatora
+                    </button>
+                    </form>
+
+                    <div class="karta-zaufanie">
+                    <span>Bezpłatnie</span>
+                    <span>Bez zobowiązań</span>
+                    <span>W kilka minut</span>
+
+
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+   <section class="korzysci" id="korzysci">
+  <div class="korzysci-kontener">
+
+    <div class="korzysci-tresc">
+      <h2>
+        Otrzymasz <strong>bezpłatną analizę</strong>
+        swojej nieruchomości
+      </h2>
+
+      <h3>Co otrzymasz dokładnie?</h3>
+
+      <ul class="korzysci-wspolpracy">
+        <li>
+          <img
+            src="assets/ikonki/forms.svg"
+            alt=""
+            aria-hidden="true"
+          >
+
+          <span>
+            Prosty formularz dotyczący nieruchomości i Twoich oczekiwań.
+          </span>
+        </li>
+
+        <li>
+          <img
+            src="assets/ikonki/mail-check.svg"
+            alt=""
+            aria-hidden="true"
+          >
+
+          <span>
+            Potwierdzenie zgłoszenia wysłane na podany adres e-mail.
+          </span>
+        </li>
+
+        <li>
+          <img
+            src="assets/ikonki/map-pin-2.svg"
+            alt=""
+            aria-hidden="true"
+          >
+
+          <span>
+            Analizę lokalizacji oraz najważniejszych parametrów nieruchomości.
+          </span>
+        </li>
+
+        <li>
+          <img
+            src="assets/ikonki/bulb.svg"
+            alt=""
+            aria-hidden="true"
+          >
+
+          <span>
+            Wskazówki dotyczące przygotowania nieruchomości do sprzedaży.
+          </span>
+        </li>
+
+        <li>
+          <img
+            src="assets/ikonki/phone-call.svg"
+            alt=""
+            aria-hidden="true"
+          >
+
+          <span>
+            Kontakt ze specjalistą w ciągu 24 godzin.
+          </span>
+        </li>
+
+        <li>
+          <img
+            src="assets/ikonki/shield-check.svg"
+            alt=""
+            aria-hidden="true"
+          >
+
+          <span>
+            Bezpłatną konsultację bez zobowiązań i ukrytych kosztów.
+          </span>
+        </li>
+      </ul>
+
+      <a href="wycena.html" class="odbierz-wycene">
+        Odbierz bezpłatną analizę
+      </a>
+    </div>
+
+    <div class="korzysci-zdjecia">
+      <div class="zdjecie-glowne">
+        <img
+          src="assets/Zdjęcie 1.png"
+          alt="Jasne wnętrze nowoczesnego mieszkania"
+          loading="lazy"
+          decoding="async"
+        >
+      </div>
+
+      <div class="zdjecie-dodatkowe">
+        <img
+          src="assets/Zdjęcie 4.png"
+          alt="Rodzina przeglądająca informacje o nieruchomości"
+          loading="lazy"
+          decoding="async"
+        >
+      </div>
+
+      <div class="etykieta-kontaktu">
+        Kontakt w ciągu 24 godzin
+      </div>
+    </div>
+
+  </div>
+</section>
+    <section class="opinie" id="opinie">
+  <div class="kontener-opinie">
+    <h2>Nasi klienci mówią o nas najlepiej</h2>
+
+    <div class="karty-opinii">
+      <article class="karta-opinii">
+        <div class="naglowek-opinii">
+          <div class="autor-opinii">
+           
+
+            <div>
+              <h3>Anna Kowalska</h3>
+             
+            </div>
+          </div>
+
+          <div class="ocena-opinii" aria-label="Ocena 5 na 5">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+          </div>
+        </div>
+
+        <blockquote class="tresc-opinii">
+          Proces wyceny był szybki i bardzo prosty. Otrzymałam czytelny
+          raport, a następnego dnia skontaktował się ze mną doradca.
+        </blockquote>
+
+        <p class="data-opinii">Zweryfikowana opinia</p>
+      </article>
+
+      <article class="karta-opinii">
+        <div class="naglowek-opinii">
+          <div class="autor-opinii">
+            
+
+            <div>
+              <h3>Marek Nowak</h3>
+             
+            </div>
+          </div>
+
+          <div class="ocena-opinii" aria-label="Ocena 5 na 5">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+          </div>
+        </div>
+
+        <blockquote class="tresc-opinii">
+          Raport pomógł mi lepiej przygotować się do sprzedaży domu.
+          Wszystkie informacje były przedstawione jasno i konkretnie.
+        </blockquote>
+
+        <p class="data-opinii">Zweryfikowana opinia</p>
+      </article>
+
+      <article class="karta-opinii">
+        <div class="naglowek-opinii">
+          <div class="autor-opinii">
+           
+
+            <div>
+              <h3>Katarzyna Piotrowska</h3>
+             
+            </div>
+          </div>
+
+          <div class="ocena-opinii" aria-label="Ocena 5 na 5">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+          </div>
+        </div>
+
+        <blockquote class="tresc-opinii">
+          Formularz był intuicyjny, a cała wycena zajęła mi tylko kilka
+          minut. Bardzo sprawna i profesjonalna obsługa.
+        </blockquote>
+
+        <p class="data-opinii">Zweryfikowana opinia</p>
+      </article>
+    </div>
+    <a href="wycena.html" class="odbierz-wycene">Odbierz bezpłatną wycenę</a>
+  </div>
+   
+</section>
+
+<section class="faq" id="faq">
+  <div class="faq-kontener">
+
+    <div class="faq-naglowek">
+      <span class="faq-etykieta">FAQ</span>
+      <h2>Najczęściej zadawane pytania</h2>
+      <p>
+        Sprawdź najważniejsze informacje dotyczące wyceny nieruchomości,
+        raportu oraz kontaktu ze specjalistą.
+      </p>
+    </div>
+
+    <div class="faq-lista">
+
+      <article class="faq-element">
+        <button
+          class="faq-pytanie"
+          type="button"
+          aria-expanded="false"
+          aria-controls="faq-odpowiedz-1"
+        >
+          <span>Czy wycena nieruchomości jest bezpłatna?</span>
+          <span class="faq-ikona" aria-hidden="true"></span>
+        </button>
+
+        <div class="faq-odpowiedz" id="faq-odpowiedz-1">
+          <div class="faq-tresc">
+            <p>
+              Tak. Skorzystanie z estymatora i otrzymanie orientacyjnego
+              raportu jest całkowicie bezpłatne i nie wiąże się z żadnymi
+              zobowiązaniami.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="faq-element">
+        <button
+          class="faq-pytanie"
+          type="button"
+          aria-expanded="false"
+          aria-controls="faq-odpowiedz-2"
+        >
+          <span>Czy otrzymany wynik jest wyceną rzeczoznawcy?</span>
+          <span class="faq-ikona" aria-hidden="true"></span>
+        </button>
+
+        <div class="faq-odpowiedz" id="faq-odpowiedz-2">
+          <div class="faq-tresc">
+            <p>
+              Nie. Wynik przedstawia orientacyjny przedział cenowy obliczony
+              na podstawie podanych parametrów. Nie zastępuje operatu
+              szacunkowego przygotowanego przez rzeczoznawcę majątkowego.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="faq-element">
+        <button
+          class="faq-pytanie"
+          type="button"
+          aria-expanded="false"
+          aria-controls="faq-odpowiedz-3"
+        >
+          <span>Jakie dane są potrzebne do wykonania wyceny?</span>
+          <span class="faq-ikona" aria-hidden="true"></span>
+        </button>
+
+        <div class="faq-odpowiedz" id="faq-odpowiedz-3">
+          <div class="faq-tresc">
+            <p>
+              Potrzebne będą podstawowe informacje o nieruchomości, takie jak
+              lokalizacja, metraż, liczba pokoi, rok budowy, piętro oraz stan
+              techniczny.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="faq-element">
+        <button
+          class="faq-pytanie"
+          type="button"
+          aria-expanded="false"
+          aria-controls="faq-odpowiedz-4"
+        >
+          <span>Jak długo trwa wypełnienie formularza?</span>
+          <span class="faq-ikona" aria-hidden="true"></span>
+        </button>
+
+        <div class="faq-odpowiedz" id="faq-odpowiedz-4">
+          <div class="faq-tresc">
+            <p>
+              Uzupełnienie formularza zajmuje zazwyczaj kilka minut. Po podaniu
+              wszystkich wymaganych informacji otrzymasz możliwość
+              potwierdzenia adresu e-mail i wyświetlenia wyniku.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="faq-element">
+        <button
+          class="faq-pytanie"
+          type="button"
+          aria-expanded="false"
+          aria-controls="faq-odpowiedz-5"
+        >
+          <span>Dlaczego muszę potwierdzić adres e-mail?</span>
+          <span class="faq-ikona" aria-hidden="true"></span>
+        </button>
+
+        <div class="faq-odpowiedz" id="faq-odpowiedz-5">
+          <div class="faq-tresc">
+            <p>
+              Potwierdzenie adresu pomaga ograniczyć nieprawidłowe zgłoszenia
+              oraz pozwala bezpiecznie przesłać raport na właściwy adres
+              e-mail.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="faq-element">
+        <button
+          class="faq-pytanie"
+          type="button"
+          aria-expanded="false"
+          aria-controls="faq-odpowiedz-6"
+        >
+          <span>Czy po wykonaniu wyceny ktoś się ze mną skontaktuje?</span>
+          <span class="faq-ikona" aria-hidden="true"></span>
+        </button>
+
+        <div class="faq-odpowiedz" id="faq-odpowiedz-6">
+          <div class="faq-tresc">
+            <p>
+              Tak. Specjalista może skontaktować się z Tobą w ciągu 24 godzin,
+              aby omówić wynik wyceny i odpowiedzieć na dodatkowe pytania.
+            </p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+</main>
+<footer class="stopka">
+  <div class="stopka-kontener">
+
+    <div class="stopka-marka">
+      <a href="index.html" class="stopka-logo" aria-label="LeadChecker, strona główna">
+        LeadChecker
+      </a>
+
+      <p>
+        Sprawdź orientacyjną wartość swojej nieruchomości szybko,
+        bezpłatnie i bez zobowiązań.
+      </p>
+    </div>
+
+    <nav class="stopka-nawigacja" aria-label="Nawigacja w stopce">
+      <h2>Nawigacja</h2>
+
+      <ul>
+                <li><a href="index.html">Strona główna</a></li>
+                <li><a href="wycena.html">Wycena</a></li>
+                <li><a href="agenci.html">Dla agentów</a></li>
+                <li><a href="index.html#opinie">Opinie</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </nav>
+
+    <div class="stopka-kontakt">
+      <h2>Kontakt</h2>
+
+      <ul>
+        <li>
+          <a href="mailto:kontakt@leadchecker.pl">
+            kontakt@leadchecker.pl
+          </a>
+        </li>
+
+        <li>
+          <a href="tel:+48123456789">
+            +48 123 456 789
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="stopka-sociale">
+      <h2>Obserwuj nas</h2>
+
+      <div class="stopka-ikony">
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Facebook"
+        >
+          <img src="assets/ikonki/brand-facebook.svg" alt="">
+        </a>
+
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+        >
+          <img src="assets/ikonki/brand-instagram.svg" alt="">
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="stopka-dol">
+    <p>
+      © <span id="rok">2026</span> LeadChecker. Wszelkie prawa zastrzeżone. Realizacja:<span class="podpisek"><a href="https://marcelpijarski.pl">Marcel Pijarski</a></span>
+    </p>
+
+    <div class="stopka-dokumenty">
+      <a href="polityka-prywatnosci.html">Polityka prywatności</a>
+      <a href="regulamin.html">Regulamin</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>    
+</body>
+</html>

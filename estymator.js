@@ -1,0 +1,1537 @@
+(function () {
+  "use strict";
+
+  if (window.leadCheckerEstimatorLoaded) return;
+  window.leadCheckerEstimatorLoaded = true;
+
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwH1LDUAUAHZJJgvwB9OdwX0mabiHGTs8OwPcYp4w1R1TjJEuSZLgwQDrO5vNdCyPXn/exec";
+
+  const RATES = {
+    apartment: {
+      fallback: 12000,
+      cities: {}
+    },
+
+    house: {
+      fallback: 9000,
+      plotFallback: 400,
+      cities: {},
+      plotCities: {}
+    },
+
+    plot: {
+      fallback: 400,
+      cities: {}
+    }
+  };
+
+  const EXTRA_MULTIPLIERS = {
+    parking: 0.03,
+    ogrod: 0.08,
+    balkon: 0.02,
+    piwnica: 0.02
+  };
+
+  const state = {
+    type: "apartment",
+    value: 0,
+    min: 0,
+    max: 0,
+    cityRate: 0,
+    rateSource: "",
+    lead: null
+  };
+
+  const qs = (selector, scope = document) => {
+    return scope.querySelector(selector);
+  };
+
+  const qsa = (selector, scope = document) => {
+    return Array.from(scope.querySelectorAll(selector));
+  };
+
+  function setVisible(element, visible, display = "block") {
+    if (!element) return;
+
+    element.hidden = !visible;
+    element.classList.toggle("hidden", !visible);
+
+    element.style.setProperty(
+      "display",
+      visible ? display : "none",
+      "important"
+    );
+  }
+
+  function scrollToElement(element) {
+    if (!element) return;
+
+    window.setTimeout(() => {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }, 80);
+  }
+
+  function normalizeCity(value) {
+    return String(value || "")
+      .trim()
+      .toLocaleLowerCase("pl")
+      .replace(/ł/g, "l")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "");
+  }
+
+  function averageRate(rates, fallback) {
+    const values = Object.values(rates)
+      .map(Number)
+      .filter(value => {
+        return Number.isFinite(value) && value > 0;
+      });
+
+    if (!values.length) {
+      return Number(fallback);
+    }
+
+    return values.reduce((sum, value) => {
+      return sum + value;
+    }, 0) / values.length;
+  }
+
+  function resolveRate(rates, city, fallback) {
+    const cityKey = normalizeCity(city);
+    const direct = Number(rates[cityKey]);
+
+    if (Number.isFinite(direct) && direct > 0) {
+      return {
+        rate: direct,
+        source: "stawka przypisana do miasta"
+      };
+    }
+
+    const hasRates = Object.values(rates).some(value => {
+      const number = Number(value);
+
+      return Number.isFinite(number) && number > 0;
+    });
+
+    return {
+      rate: averageRate(rates, fallback),
+      source: hasRates
+        ? "średnia stawek innych miast"
+        : "stawka domyślna"
+    };
+  }
+
+  function valueOf(id) {
+    const input = qs("#" + id);
+
+    return input
+      ? String(input.value || "").trim()
+      : "";
+  }
+
+  function selectedText(id) {
+    const select = qs("#" + id);
+
+    if (!select || select.selectedIndex < 0) {
+      return "brak";
+    }
+
+    return String(
+      select.options[select.selectedIndex].text || "brak"
+    );
+  }
+
+  function requiredTextValue(id, label, minLength = 1) {
+    const input = qs("#" + id);
+    const value = input
+      ? String(input.value || "").trim()
+      : "";
+
+    if (value.length < minLength) {
+      if (input) {
+        input.focus();
+      }
+
+      throw new Error(
+        "Uzupełnij pole: " + label + "."
+      );
+    }
+
+    return value;
+  }
+
+  function postalCodeValue(id, label) {
+    const input = qs("#" + id);
+    const value = input
+      ? String(input.value || "").trim()
+      : "";
+
+    if (!/^[0-9]{2}-[0-9]{3}$/.test(value)) {
+      if (input) {
+        input.focus();
+      }
+
+      throw new Error(
+        "Podaj poprawny kod pocztowy w polu: " +
+        label +
+        "."
+      );
+    }
+
+    return value;
+  }
+
+  function addressPayload() {
+    if (state.type === "plot") {
+      return {
+        street: "brak",
+        buildingNumber: "brak",
+        apartmentNumber: "brak",
+        postalCode: "brak",
+        plotStreet: valueOf("plotStreet") || "brak",
+        plotNumber: requiredTextValue(
+          "plotNumber",
+          "numer działki"
+        ),
+        plotPostalCode: postalCodeValue(
+          "plotPostalCode",
+          "kod pocztowy działki"
+        )
+      };
+    }
+
+    return {
+      street: requiredTextValue(
+        "street",
+        "ulica",
+        2
+      ),
+      buildingNumber: requiredTextValue(
+        "buildingNumber",
+        "numer budynku"
+      ),
+      apartmentNumber:
+        valueOf("apartmentNumber") || "brak",
+      postalCode: postalCodeValue(
+        "postalCode",
+        "kod pocztowy"
+      ),
+      plotStreet: "brak",
+      plotNumber: "brak",
+      plotPostalCode: "brak"
+    };
+  }
+
+  function numberOf(id, label, min, max) {
+    const input = qs("#" + id);
+
+    if (!input) {
+      throw new Error(
+        "Nie znaleziono pola: " + label + "."
+      );
+    }
+
+    const value = Number(input.value);
+
+    if (!Number.isFinite(value)) {
+      input.focus();
+
+      throw new Error(
+        "Podaj poprawną wartość w polu: " + label + "."
+      );
+    }
+
+    if (typeof min === "number" && value < min) {
+      input.focus();
+
+      throw new Error(
+        "Minimalna wartość pola " +
+        label +
+        " to " +
+        min +
+        "."
+      );
+    }
+
+    if (typeof max === "number" && value > max) {
+      input.focus();
+
+      throw new Error(
+        "Maksymalna wartość pola " +
+        label +
+        " to " +
+        max +
+        "."
+      );
+    }
+
+    return value;
+  }
+
+  function cityValue() {
+    const input = qs("#city");
+    const city = input
+      ? input.value.trim()
+      : "";
+
+    if (city.length < 2) {
+      if (input) {
+        input.focus();
+      }
+
+      throw new Error(
+        "Wpisz miejscowość nieruchomości."
+      );
+    }
+
+    return city;
+  }
+
+  function reasonValue() {
+    const input = qs(
+      'input[name="reason"]:checked'
+    );
+
+    if (!input) {
+      const first = qs(
+        'input[name="reason"]'
+      );
+
+      if (first) {
+        first.focus();
+      }
+
+      throw new Error(
+        "Wybierz cel wykonania wyceny."
+      );
+    }
+
+    return input.value;
+  }
+
+  function checkedValues(selector) {
+    return qsa(selector).map(input => {
+      return String(input.value || "").trim();
+    });
+  }
+
+  function standardMultiplier() {
+    const input = qs("#standard");
+    const value = input
+      ? Number(input.value)
+      : 1;
+
+    return Number.isFinite(value) && value > 0
+      ? value
+      : 1;
+  }
+
+  function extrasMultiplier() {
+    return qsa(".extra:checked").reduce(
+      (multiplier, input) => {
+        const addition =
+          Number(EXTRA_MULTIPLIERS[input.value]) || 0;
+
+        return multiplier + addition;
+      },
+      1
+    );
+  }
+
+  function validateYear() {
+    if (state.type === "plot") {
+      return;
+    }
+
+    const currentYear =
+      new Date().getFullYear();
+
+    numberOf(
+      "year",
+      "rok budowy",
+      1800,
+      currentYear + 1
+    );
+  }
+
+  function calculate(city) {
+    validateYear();
+
+    if (state.type === "apartment") {
+      numberOf(
+        "rooms",
+        "liczba pokoi",
+        1,
+        30
+      );
+
+      const area = numberOf(
+        "area",
+        "metraż",
+        10,
+        2000
+      );
+
+      const floor = numberOf(
+        "floor",
+        "piętro",
+        0,
+        100
+      );
+
+      const floors = numberOf(
+        "buildingFloors",
+        "liczba pięter budynku",
+        1,
+        100
+      );
+
+      if (floor > floors) {
+        const floorInput = qs("#floor");
+
+        if (floorInput) {
+          floorInput.focus();
+        }
+
+        throw new Error(
+          "Piętro mieszkania nie może być wyższe niż liczba pięter budynku."
+        );
+      }
+
+      const rateData = resolveRate(
+        RATES.apartment.cities,
+        city,
+        RATES.apartment.fallback
+      );
+
+      return {
+        value:
+          area *
+          rateData.rate *
+          standardMultiplier() *
+          extrasMultiplier(),
+
+        rate: rateData.rate,
+        source: rateData.source
+      };
+    }
+
+    if (state.type === "house") {
+      numberOf(
+        "houseRooms",
+        "liczba pokoi",
+        1,
+        50
+      );
+
+      const area = numberOf(
+        "houseArea",
+        "metraż domu",
+        20,
+        5000
+      );
+
+      const plot = numberOf(
+        "plot",
+        "powierzchnia działki",
+        0,
+        1000000
+      );
+
+      numberOf(
+        "houseFloors",
+        "liczba kondygnacji",
+        1,
+        10
+      );
+
+      const houseRate = resolveRate(
+        RATES.house.cities,
+        city,
+        RATES.house.fallback
+      );
+
+      const plotRate = resolveRate(
+        RATES.house.plotCities,
+        city,
+        RATES.house.plotFallback
+      );
+
+      const buildingValue =
+        area * houseRate.rate;
+
+      const plotValue =
+        plot * plotRate.rate;
+
+      return {
+        value:
+          (buildingValue + plotValue) *
+          standardMultiplier() *
+          extrasMultiplier(),
+
+        rate: houseRate.rate,
+        source: houseRate.source
+      };
+    }
+
+    if (state.type === "plot") {
+      const area = numberOf(
+        "plotArea",
+        "powierzchnia działki",
+        1,
+        10000000
+      );
+
+      const rateData = resolveRate(
+        RATES.plot.cities,
+        city,
+        RATES.plot.fallback
+      );
+
+      return {
+        value: area * rateData.rate,
+        rate: rateData.rate,
+        source: rateData.source
+      };
+    }
+
+    throw new Error(
+      "Nie rozpoznano rodzaju nieruchomości."
+    );
+  }
+
+  function propertyPayload() {
+    if (state.type === "apartment") {
+      return {
+        rooms: valueOf("rooms"),
+        area: valueOf("area"),
+        plotArea: "brak",
+        floor: valueOf("floor"),
+        buildingFloors: valueOf(
+          "buildingFloors"
+        ),
+        year: valueOf("year"),
+        standard: selectedText("standard"),
+        plotType: "brak",
+        plotRoad: "brak",
+        plotPlan: "brak"
+      };
+    }
+
+    if (state.type === "house") {
+      return {
+        rooms: valueOf("houseRooms"),
+        area: valueOf("houseArea"),
+        plotArea: valueOf("plot"),
+        floor: "brak",
+        buildingFloors: valueOf(
+          "houseFloors"
+        ),
+        year: valueOf("year"),
+        standard: selectedText("standard"),
+        plotType: "brak",
+        plotRoad: "brak",
+        plotPlan: "brak"
+      };
+    }
+
+    const plan = qs("#plotPlan");
+
+    return {
+      rooms: "brak",
+      area: "brak",
+      plotArea: valueOf("plotArea"),
+      floor: "brak",
+      buildingFloors: "brak",
+      year: "brak",
+      standard: "brak",
+      plotType: selectedText("plotType"),
+      plotRoad: selectedText("plotRoad"),
+      plotPlan:
+        plan && plan.checked
+          ? "Tak"
+          : "Nie"
+    };
+  }
+
+  function validEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      email
+    );
+  }
+
+  function contactData() {
+    const nameInput = qs("#name");
+    const emailInput = qs("#email");
+    const phoneInput = qs("#phone");
+
+    const name = nameInput
+      ? nameInput.value.trim()
+      : "";
+
+    const email = emailInput
+      ? emailInput.value.trim().toLowerCase()
+      : "";
+
+    const phone = phoneInput
+      ? phoneInput.value.trim()
+      : "";
+
+    const phoneDigits =
+      phone.replace(/\D/g, "");
+
+    if (name.length < 2) {
+      if (nameInput) {
+        nameInput.focus();
+      }
+
+      throw new Error(
+        "Podaj imię i nazwisko."
+      );
+    }
+
+    if (!validEmail(email)) {
+      if (emailInput) {
+        emailInput.focus();
+      }
+
+      throw new Error(
+        "Podaj poprawny adres email."
+      );
+    }
+
+    if (
+      phoneDigits.length < 9 ||
+      phoneDigits.length > 15
+    ) {
+      if (phoneInput) {
+        phoneInput.focus();
+      }
+
+      throw new Error(
+        "Podaj poprawny numer telefonu."
+      );
+    }
+
+    const consent = qs(
+      'input[name="Zgoda na kontakt"]'
+    );
+
+    if (consent && !consent.checked) {
+      consent.focus();
+
+      throw new Error(
+        "Zaznacz zgodę na kontakt."
+      );
+    }
+
+    return {
+      name: name,
+      email: email,
+      phone: phone
+    };
+  }
+
+  async function request(payload) {
+  const controller = new AbortController();
+
+  const timeout = window.setTimeout(function () {
+    controller.abort();
+  }, 60000);
+
+  try {
+    console.log("Wysyłam dane do Apps Script:", payload.action);
+
+    const startTime = performance.now();
+
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+      redirect: "follow"
+    });
+
+    const responseText = await response.text();
+
+    const requestTime = Math.round(
+      performance.now() - startTime
+    );
+
+    console.log(
+      "Apps Script odpowiedział po:",
+      requestTime,
+      "ms"
+    );
+
+    console.log(
+      "Odpowiedź Apps Script:",
+      responseText
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Serwer zwrócił błąd HTTP " +
+        response.status +
+        "."
+      );
+    }
+
+    if (!responseText.trim()) {
+      throw new Error(
+        "Serwer zwrócił pustą odpowiedź."
+      );
+    }
+
+    let responseData;
+
+    try {
+      responseData = JSON.parse(responseText);
+    } catch (error) {
+      console.error(
+        "Nie można odczytać odpowiedzi JSON:",
+        responseText
+      );
+
+      throw new Error(
+        "Serwer zwrócił odpowiedź w nieprawidłowym formacie."
+      );
+    }
+
+    return responseData;
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error(
+        "Wysyłanie trwało zbyt długo. Spróbuj ponownie za chwilę."
+      );
+    }
+
+    if (
+      error instanceof TypeError &&
+      String(error.message).includes("fetch")
+    ) {
+      throw new Error(
+        "Nie udało się połączyć z usługą wyceny."
+      );
+    }
+
+    throw error;
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+
+  function loading(
+    button,
+    active,
+    text
+  ) {
+    if (!button) {
+      return;
+    }
+
+    if (active) {
+      if (!button.dataset.originalText) {
+        button.dataset.originalText =
+          button.textContent.trim();
+      }
+
+      button.disabled = true;
+      button.textContent = text;
+
+      button.setAttribute(
+        "aria-busy",
+        "true"
+      );
+
+      return;
+    }
+
+    button.disabled = false;
+
+    button.textContent =
+      button.dataset.originalText ||
+      button.textContent;
+
+    button.removeAttribute(
+      "aria-busy"
+    );
+  }
+
+  function resetResult() {
+    state.value = 0;
+    state.min = 0;
+    state.max = 0;
+    state.cityRate = 0;
+    state.rateSource = "";
+    state.lead = null;
+
+    setVisible(
+      qs("#result"),
+      false
+    );
+
+    setVisible(
+      qs("#codeBox"),
+      false
+    );
+  }
+
+  function showType(type) {
+    state.type = type;
+
+    setVisible(
+      qs("#apartmentFields"),
+      type === "apartment"
+    );
+
+    setVisible(
+      qs("#houseFields"),
+      type === "house"
+    );
+
+    setVisible(
+      qs("#plotFields"),
+      type === "plot"
+    );
+
+    setVisible(
+      qs("#buildingDetails"),
+      type !== "plot"
+    );
+
+    setVisible(
+      qs("#buildingAddressFields"),
+      type !== "plot"
+    );
+
+    setVisible(
+      qs("#plotAddressFields"),
+      type === "plot"
+    );
+
+    [
+      [
+        qs("#apartmentBtn"),
+        "apartment"
+      ],
+      [
+        qs("#houseBtn"),
+        "house"
+      ],
+      [
+        qs("#plotBtn"),
+        "plot"
+      ]
+    ].forEach(entry => {
+      const button = entry[0];
+      const buttonType = entry[1];
+
+      if (!button) {
+        return;
+      }
+
+      const active =
+        buttonType === type;
+
+      button.classList.toggle(
+        "active",
+        active
+      );
+
+      button.setAttribute(
+        "aria-pressed",
+        String(active)
+      );
+    });
+
+    resetResult();
+  }
+
+  function initTypeButtons() {
+    const apartment =
+      qs("#apartmentBtn");
+
+    const house =
+      qs("#houseBtn");
+
+    const plot =
+      qs("#plotBtn");
+
+    if (
+      !apartment ||
+      !house ||
+      !plot
+    ) {
+      throw new Error(
+        "Nie znaleziono przycisków rodzaju nieruchomości."
+      );
+    }
+
+    apartment.addEventListener(
+      "click",
+      () => {
+        showType("apartment");
+      }
+    );
+
+    house.addEventListener(
+      "click",
+      () => {
+        showType("house");
+      }
+    );
+
+    plot.addEventListener(
+      "click",
+      () => {
+        showType("plot");
+      }
+    );
+
+    showType("apartment");
+  }
+
+  function initCalculator() {
+    const form =
+      qs("#calculatorForm");
+
+    const result =
+      qs("#result");
+
+    const price =
+      qs("#price");
+
+    const leadForm =
+      qs("#leadForm");
+
+    const codeBox =
+      qs("#codeBox");
+
+    if (
+      !form ||
+      !result ||
+      !price ||
+      !leadForm ||
+      !codeBox
+    ) {
+      throw new Error(
+        "Brakuje elementów formularza estymatora."
+      );
+    }
+
+    form.noValidate = true;
+
+    form.addEventListener(
+      "submit",
+      event => {
+        event.preventDefault();
+
+        try {
+          const city =
+            cityValue();
+
+          addressPayload();
+
+          const reason =
+            reasonValue();
+
+          const estimate =
+            calculate(city);
+
+          if (
+            !Number.isFinite(
+              estimate.value
+            ) ||
+            estimate.value <= 0
+          ) {
+            throw new Error(
+              "Nie udało się obliczyć wartości nieruchomości."
+            );
+          }
+
+          state.value =
+            Math.round(
+              estimate.value
+            );
+
+          state.min =
+            Math.round(
+              state.value * 0.9
+            );
+
+          state.max =
+            Math.round(
+              state.value * 1.1
+            );
+
+          state.cityRate =
+            Math.round(
+              estimate.rate
+            );
+
+          state.rateSource =
+            estimate.source;
+
+          state.lead = {
+            city: city,
+            reason: reason
+          };
+
+          price.innerHTML =
+            "<h3>Analiza została przygotowana</h3>" +
+            "<p>Podaj dane kontaktowe i potwierdź adres email, aby przekazać zgłoszenie do zespołu LeadChecker.</p>";
+
+          setVisible(
+            result,
+            true
+          );
+
+          setVisible(
+            leadForm,
+            true,
+            "grid"
+          );
+
+          setVisible(
+            codeBox,
+            false
+          );
+
+          scrollToElement(
+            result
+          );
+        } catch (error) {
+          console.error(error);
+
+          window.alert(
+            error.message ||
+            "Sprawdź wprowadzone dane."
+          );
+        }
+      }
+    );
+  }
+
+  function initLeadForm() {
+    const form =
+      qs("#leadForm");
+
+    const codeBox =
+      qs("#codeBox");
+
+    if (!form || !codeBox) {
+      throw new Error(
+        "Brakuje formularza danych kontaktowych."
+      );
+    }
+
+    form.noValidate = true;
+
+    form.addEventListener(
+      "submit",
+      async event => {
+        event.preventDefault();
+
+        const button = qs(
+          'button[type="submit"]',
+          form
+        );
+
+        try {
+          if (state.value <= 0) {
+            throw new Error(
+              "Najpierw oblicz wartość nieruchomości."
+            );
+          }
+
+          const contact =
+            contactData();
+
+          const payload =
+            Object.assign(
+              {
+                action: "sendCode",
+                type: state.type,
+                city: cityValue(),
+                name: contact.name,
+                email: contact.email,
+                phone: contact.phone,
+                value: state.value,
+                minimumValue: state.min,
+                maximumValue: state.max,
+                cityRate: state.cityRate,
+                rateSource:
+                  state.rateSource,
+                reason: reasonValue(),
+
+                preferences:
+                  checkedValues(
+                    ".preference:checked"
+                  ).join(", "),
+
+                extras:
+                  checkedValues(
+                    ".extra:checked"
+                  ).join(", "),
+
+                plotUtilities:
+                  checkedValues(
+                    ".plotUtility:checked"
+                  ).join(", ")
+              },
+
+              propertyPayload(),
+              addressPayload()
+            );
+
+          state.lead = payload;
+
+          loading(
+            button,
+            true,
+            "Wysyłanie kodu"
+          );
+
+          const response =
+            await request(payload);
+
+          if (
+            !response ||
+            response.status !==
+              "code_sent"
+          ) {
+            throw new Error(
+              response &&
+              response.message
+                ? response.message
+                : "Nie udało się wysłać kodu weryfikacyjnego."
+            );
+          }
+
+          setVisible(
+            form,
+            false
+          );
+
+          setVisible(
+            codeBox,
+            true
+          );
+
+          scrollToElement(
+            codeBox
+          );
+
+          const codeInput =
+            qs("#verifyCode");
+
+          if (codeInput) {
+            codeInput.focus();
+          }
+        } catch (error) {
+          console.error(error);
+
+          window.alert(
+            error.message ||
+            "Nie udało się wysłać kodu weryfikacyjnego."
+          );
+        } finally {
+          loading(
+            button,
+            false
+          );
+        }
+      }
+    );
+  }
+
+  function showResult() {
+    const result =
+      qs("#result");
+
+    const price =
+      qs("#price");
+
+    const heading =
+      qs(
+        ".wynik-estymatora-naglowek h2"
+      );
+
+    if (!result || !price) {
+      return;
+    }
+
+    if (heading) {
+      heading.textContent =
+        "Dziękujemy za zgłoszenie";
+    }
+
+    price.innerHTML =
+      "<h3>Adres email został potwierdzony</h3>" +
+      "<p>Twoje zgłoszenie oraz dane nieruchomości zostały przekazane do zespołu LeadChecker.</p>" +
+      "<p>Skontaktujemy się z Tobą w sprawie dalszych szczegółów.</p>";
+
+    setVisible(
+      result,
+      true
+    );
+
+    setVisible(
+      qs("#leadForm"),
+      false
+    );
+
+    setVisible(
+      qs("#codeBox"),
+      false
+    );
+
+    scrollToElement(
+      result
+    );
+  }
+
+  function initVerifyForm() {
+    const form =
+      qs("#verifyForm");
+
+    if (!form) {
+      throw new Error(
+        "Brakuje formularza weryfikacji kodu."
+      );
+    }
+
+    form.noValidate = true;
+
+    form.addEventListener(
+      "submit",
+      async event => {
+        event.preventDefault();
+
+        const button = qs(
+          'button[type="submit"]',
+          form
+        );
+
+        const input =
+          qs("#verifyCode");
+
+        const code = input
+          ? String(
+              input.value || ""
+            ).trim()
+          : "";
+
+        try {
+          if (
+            !state.lead ||
+            !state.lead.email
+          ) {
+            throw new Error(
+              "Najpierw wyślij dane kontaktowe."
+            );
+          }
+
+          if (!/^\d{6}$/.test(code)) {
+            if (input) {
+              input.focus();
+            }
+
+            throw new Error(
+              "Kod powinien składać się z 6 cyfr."
+            );
+          }
+
+          loading(
+            button,
+            true,
+            "Sprawdzanie kodu"
+          );
+
+          const response =
+            await request({
+              action: "verifyCode",
+              email: state.lead.email,
+              code: code
+            });
+
+          if (
+            response &&
+            response.status ===
+              "verified"
+          ) {
+            showResult();
+            return;
+          }
+
+          if (
+            response &&
+            response.status ===
+              "expired"
+          ) {
+            throw new Error(
+              "Kod wygasł. Wyślij nowy kod."
+            );
+          }
+
+          if (
+            response &&
+            response.status ===
+              "wrong_code"
+          ) {
+            throw new Error(
+              "Podany kod jest nieprawidłowy."
+            );
+          }
+
+          throw new Error(
+            response &&
+            response.message
+              ? response.message
+              : "Nie udało się sprawdzić kodu."
+          );
+        } catch (error) {
+          console.error(error);
+
+          window.alert(
+            error.message ||
+            "Nie udało się sprawdzić kodu."
+          );
+        } finally {
+          loading(
+            button,
+            false
+          );
+        }
+      }
+    );
+  }
+
+  window.changeValue = function (
+    id,
+    amount
+  ) {
+    const input =
+      qs("#" + id);
+
+    if (!input) {
+      return;
+    }
+
+    const current =
+      Number(input.value) || 0;
+
+    const min =
+      input.min !== ""
+        ? Number(input.min)
+        : null;
+
+    const max =
+      input.max !== ""
+        ? Number(input.max)
+        : null;
+
+    let next =
+      current +
+      Number(amount || 0);
+
+    if (Number.isFinite(min)) {
+      next = Math.max(
+        min,
+        next
+      );
+    }
+
+    if (Number.isFinite(max)) {
+      next = Math.min(
+        max,
+        next
+      );
+    }
+
+    input.value = next;
+
+    input.dispatchEvent(
+      new Event(
+        "input",
+        {
+          bubbles: true
+        }
+      )
+    );
+  };
+
+  function parseHeroAddress(rawAddress) {
+  let address = String(rawAddress || "")
+    .trim()
+    .replace(/\s+/g, " ");
+
+  let postalCode = "";
+
+  const postalMatch = address.match(/\b\d{2}-\d{3}\b/);
+
+  if (postalMatch) {
+    postalCode = postalMatch[0];
+
+    address = address
+      .replace(postalMatch[0], "")
+      .trim();
+  }
+
+  const parts = address
+    .split(",")
+    .map(function (part) {
+      return part.trim();
+    })
+    .filter(function (part) {
+      return part.length > 0;
+    });
+
+  let city = "";
+  let streetPart = "";
+
+  if (parts.length >= 2) {
+    city = parts[0];
+    streetPart = parts.slice(1).join(" ");
+  } else {
+    streetPart = address;
+  }
+
+  streetPart = streetPart
+    .replace(/^(ul\.?|ulica)\s+/i, "")
+    .trim();
+
+  let street = streetPart;
+  let buildingNumber = "";
+  let apartmentNumber = "";
+
+  const numberMatch = streetPart.match(
+    /\s+([0-9]+[A-Za-z]?(?:\/[0-9A-Za-z]+)?)$/
+  );
+
+  if (numberMatch) {
+    const fullNumber = numberMatch[1];
+    const numberParts = fullNumber.split("/");
+
+    buildingNumber = numberParts[0] || "";
+    apartmentNumber = numberParts[1] || "";
+
+    street = streetPart
+      .slice(0, numberMatch.index)
+      .trim();
+  }
+
+  return {
+    city: city,
+    street: street,
+    buildingNumber: buildingNumber,
+    apartmentNumber: apartmentNumber,
+    postalCode: postalCode
+  };
+}
+
+function setInputValue(id, value) {
+  const input = qs("#" + id);
+
+  if (!input || !value) {
+    return;
+  }
+
+  input.value = value;
+
+  input.dispatchEvent(
+    new Event("input", {
+      bubbles: true
+    })
+  );
+}
+
+function prefillAddressFromHero() {
+  const savedAddress = sessionStorage.getItem(
+    "leadcheckerAdresNieruchomosci"
+  );
+
+  if (!savedAddress) {
+    return;
+  }
+
+  const address = parseHeroAddress(savedAddress);
+
+  setInputValue("city", address.city);
+  setInputValue("street", address.street);
+  setInputValue(
+    "buildingNumber",
+    address.buildingNumber
+  );
+  setInputValue(
+    "apartmentNumber",
+    address.apartmentNumber
+  );
+  setInputValue(
+    "postalCode",
+    address.postalCode
+  );
+
+  setInputValue(
+    "plotStreet",
+    address.street
+  );
+
+  setInputValue(
+    "plotPostalCode",
+    address.postalCode
+  );
+
+  sessionStorage.removeItem(
+    "leadcheckerAdresNieruchomosci"
+  );
+}
+
+  function init() {
+    if (!qs("#calculatorForm")) {
+      return;
+    }
+
+    try {
+      initTypeButtons();
+      prefillAddressFromHero();
+      initCalculator();
+      initLeadForm();
+      initVerifyForm();
+
+      console.log(
+        "Estymator LeadChecker został uruchomiony."
+      );
+    } catch (error) {
+      console.error(
+        "Błąd uruchamiania estymatora:",
+        error
+      );
+    }
+  }
+
+  if (
+    document.readyState ===
+    "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      init,
+      {
+        once: true
+      }
+    );
+  } else {
+    init();
+  }
+})();
