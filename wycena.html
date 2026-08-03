@@ -7,7 +7,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0">
 
-  <title>Document</title>
+  <title>Bezpłatna wycena nieruchomości | LeadChecker</title>
 
   <meta
     name="description"
@@ -141,6 +141,25 @@
 
         <div class="estimator-panel">
 
+          <div
+            class="formularz-progress"
+            id="formProgress"
+            role="progressbar"
+            aria-valuemin="1"
+            aria-valuemax="5"
+            aria-valuenow="1"
+            aria-label="Postęp formularza"
+          >
+            <div class="formularz-progress-info">
+              <span id="progressStepText">Krok 1 z 5</span>
+              <strong id="progressStepName">Lokalizacja</strong>
+            </div>
+
+            <div class="formularz-progress-track" aria-hidden="true">
+              <span id="progressBar"></span>
+            </div>
+          </div>
+
           <div class="property-type" aria-label="Rodzaj nieruchomości">
 
             <button
@@ -169,7 +188,7 @@
 
           <form id="calculatorForm" novalidate>
 
-            <div class="formularz-sekcja">
+            <div class="formularz-sekcja" data-progress-index="1" data-progress-name="Lokalizacja">
 
               <div class="formularz-sekcja-naglowek">
                 <span class="numer-sekcji">01</span>
@@ -181,6 +200,28 @@
                     miejscowość.
                   </p>
                 </div>
+              </div>
+
+              <div class="pole-formularza pole-pelne adres-wyszukiwarka">
+                <label for="addressSearch">
+                  Adres nieruchomości
+                  <span class="wymagane">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="addressSearch"
+                  name="Adres nieruchomości"
+                  placeholder="Zacznij wpisywać adres, np. Opole, ul. Róż 3"
+                  autocomplete="off"
+                  minlength="3"
+                >
+
+                <input type="hidden" id="googlePlaceId" name="Google Place ID">
+
+                <small id="addressStatus" class="adres-wyszukiwarka-status">
+                  Wpisz minimum 3 znaki i wybierz adres z podpowiedzi.
+                </small>
               </div>
 
               <div class="pole-formularza pole-pelne">
@@ -233,7 +274,7 @@
                 </datalist>
 
                 <small>
-                  Brak miasta na liście nie blokuje wykonania estymacji.
+                  Po wybraniu podpowiedzi pole zostanie uzupełnione automatycznie.
                 </small>
               </div>
 
@@ -257,7 +298,7 @@
                       name="Ulica"
                       placeholder="Np. Marszałkowska"
                       autocomplete="address-line1"
-                      minlength="2"
+                      minlength="3"
                       required
                     >
                   </div>
@@ -374,7 +415,7 @@
 
             </div>
 
-            <div class="formularz-sekcja">
+            <div class="formularz-sekcja" data-progress-index="2" data-progress-name="Parametry nieruchomości">
 
               <div class="formularz-sekcja-naglowek">
                 <span class="numer-sekcji">02</span>
@@ -824,7 +865,7 @@
 
             </div>
 
-            <div class="formularz-sekcja" id="buildingDetails">
+            <div class="formularz-sekcja" id="buildingDetails" data-progress-index="3" data-progress-name="Stan i cel wyceny">
 
               <div class="formularz-sekcja-naglowek">
                 <span class="numer-sekcji">03</span>
@@ -917,7 +958,7 @@
               </div>
             </div>
 
-            <div class="formularz-sekcja">
+            <div class="formularz-sekcja" data-progress-index="3" data-progress-name="Stan i cel wyceny">
 
               <div class="formularz-sekcja-naglowek">
                 <span class="numer-sekcji">04</span>
@@ -993,6 +1034,8 @@
             id="result"
             class="wynik-estymatora hidden"
             aria-live="polite"
+            data-progress-index="4"
+            data-progress-name="Dane kontaktowe"
           >
 
             <div class="wynik-estymatora-naglowek">
@@ -1077,78 +1120,558 @@
 
               <div class="preferencje-wyceny">
 
-                <h3>Co jest dla Ciebie najważniejsze?</h3>
+                <div class="preferencje-naglowek">
+                  <div>
+                    <h3>Co jest dla Ciebie najważniejsze?</h3>
+                    <p>Wybierz maksymalnie 3 opcje.</p>
+                  </div>
 
-                <p>
-                  Możesz zaznaczyć kilka odpowiedzi.
-                </p>
+                  <span id="preferenceCounter" class="preferencje-licznik" aria-live="polite">
+                    0 z 3
+                  </span>
+                </div>
 
-                <div class="opcje-siatka">
+                <div class="preferencje-lista">
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Maksymalizacja ceny sprzedaży"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Maksymalizacja ceny sprzedaży</span>
+                    </label>
 
-                  <label class="opcja-karta">
-                    <input
-                      class="preference"
-                      type="checkbox"
-                      value="Najwyższa możliwa cena"
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis1"
                     >
-                    <span>Najwyższa możliwa cena sprzedaży</span>
-                  </label>
+                      Maksymalizacja ceny sprzedaży
+                    </button>
 
-                  <label class="opcja-karta">
-                    <input
-                      class="preference"
-                      type="checkbox"
-                      value="Szybka sprzedaż"
+                    <p id="preferencjaOpis1" class="preferencja-opis">
+                      Uzyskanie kwoty rynkowej lub wyższej.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Jak najszybsza sprzedaż"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Jak najszybsza sprzedaż</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis2"
                     >
-                    <span>Szybka sprzedaż</span>
-                  </label>
+                      Jak najszybsza sprzedaż
+                    </button>
 
-                  <label class="opcja-karta">
-                    <input
-                      class="preference"
-                      type="checkbox"
-                      value="Zdjęcia z drona"
+                    <p id="preferencjaOpis2" class="preferencja-opis">
+                      Znalezienie kupca w możliwie najkrótszym czasie.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Niska prowizja biura"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Niska prowizja biura</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis3"
                     >
-                    <span>Zdjęcia z drona</span>
-                  </label>
+                      Niska prowizja biura
+                    </button>
 
-                  <label class="opcja-karta">
-                    <input
-                      class="preference"
-                      type="checkbox"
-                      value="Home staging"
+                    <p id="preferencjaOpis3" class="preferencja-opis">
+                      Elastyczne podejście do wynagrodzenia pośrednika.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Brak opłat na start"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Brak opłat na start</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis4"
                     >
-                    <span>Home staging</span>
-                  </label>
+                      Brak opłat na start
+                    </button>
 
-                  <label class="opcja-karta opcja-pelna">
-                    <input
-                      class="preference"
-                      type="checkbox"
-                      value="Pomoc w dokumentach"
+                    <p id="preferencjaOpis4" class="preferencja-opis">
+                      Rozliczenie prowizyjne dopiero po skutecznej sprzedaży.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Profesjonalna wycena rynkowa"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Profesjonalna wycena rynkowa</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis5"
                     >
-                    <span>Pomoc w dokumentach i formalnościach</span>
-                  </label>
+                      Profesjonalna wycena rynkowa
+                    </button>
 
+                    <p id="preferencjaOpis5" class="preferencja-opis">
+                      Ustalenie wartości na podstawie analizy rynku i cen w okolicy.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Profesjonalna sesja zdjęciowa"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Profesjonalna sesja zdjęciowa</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis6"
+                    >
+                      Profesjonalna sesja zdjęciowa
+                    </button>
+
+                    <p id="preferencjaOpis6" class="preferencja-opis">
+                      Wysokiej jakości zdjęcia prezentujące nieruchomość.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Ujęcia i film z drona"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Ujęcia i film z drona</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis7"
+                    >
+                      Ujęcia i film z drona
+                    </button>
+
+                    <p id="preferencjaOpis7" class="preferencja-opis">
+                      Materiały szczególnie przydatne przy domach i działkach.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Wirtualny spacer 3D"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Wirtualny spacer 3D</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis8"
+                    >
+                      Wirtualny spacer 3D
+                    </button>
+
+                    <p id="preferencjaOpis8" class="preferencja-opis">
+                      Możliwość zdalnego zwiedzania nieruchomości.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Home staging"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Home staging</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis9"
+                    >
+                      Home staging
+                    </button>
+
+                    <p id="preferencjaOpis9" class="preferencja-opis">
+                      Przygotowanie wizualne i aranżacja wnętrza przed sprzedażą.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Szeroka promocja ogłoszenia"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Szeroka promocja ogłoszenia</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis10"
+                    >
+                      Szeroka promocja ogłoszenia
+                    </button>
+
+                    <p id="preferencjaOpis10" class="preferencja-opis">
+                      Promocja na portalach nieruchomości i w mediach społecznościowych.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Organizacja dni otwartych"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Organizacja dni otwartych</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis11"
+                    >
+                      Organizacja dni otwartych
+                    </button>
+
+                    <p id="preferencjaOpis11" class="preferencja-opis">
+                      Prezentacja nieruchomości wielu zainteresowanym w jednym terminie.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Pełna obsługa dokumentacji"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Pełna obsługa dokumentacji</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis12"
+                    >
+                      Pełna obsługa dokumentacji
+                    </button>
+
+                    <p id="preferencjaOpis12" class="preferencja-opis">
+                      Pomoc w zebraniu dokumentów i zaświadczeń potrzebnych do sprzedaży.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Bezpieczeństwo prawne transakcji"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Bezpieczeństwo prawne transakcji</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis13"
+                    >
+                      Bezpieczeństwo prawne transakcji
+                    </button>
+
+                    <p id="preferencjaOpis13" class="preferencja-opis">
+                      Weryfikacja stanu prawnego, obciążeń i dokumentów nieruchomości.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Świadectwo charakterystyki energetycznej"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Świadectwo charakterystyki energetycznej</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis14"
+                    >
+                      Świadectwo charakterystyki energetycznej
+                    </button>
+
+                    <p id="preferencjaOpis14" class="preferencja-opis">
+                      Pomoc w sprawnym uzyskaniu wymaganego świadectwa.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Weryfikacja kupujących"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Weryfikacja kupujących</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis15"
+                    >
+                      Weryfikacja kupujących
+                    </button>
+
+                    <p id="preferencjaOpis15" class="preferencja-opis">
+                      Sprawdzenie tożsamości i realnych możliwości finansowych kupujących.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Prowadzenie trudnych negocjacji"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Prowadzenie trudnych negocjacji</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis16"
+                    >
+                      Prowadzenie trudnych negocjacji
+                    </button>
+
+                    <p id="preferencjaOpis16" class="preferencja-opis">
+                      Agent prowadzi rozmowy i dba o możliwie najlepsze warunki sprzedaży.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Protokół zdawczo odbiorczy"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Protokół zdawczo odbiorczy</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis17"
+                    >
+                      Protokół zdawczo odbiorczy
+                    </button>
+
+                    <p id="preferencjaOpis17" class="preferencja-opis">
+                      Obsługa wydania nieruchomości i pomoc w rozliczeniu mediów.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Jeden dedykowany agent"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Jeden dedykowany agent</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis18"
+                    >
+                      Jeden dedykowany agent
+                    </button>
+
+                    <p id="preferencjaOpis18" class="preferencja-opis">
+                      Stały opiekun prowadzący cały proces sprzedaży.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Raportowanie postępów"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Raportowanie postępów</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis19"
+                    >
+                      Raportowanie postępów
+                    </button>
+
+                    <p id="preferencjaOpis19" class="preferencja-opis">
+                      Regularne informacje o zapytaniach, prezentacjach i rozmowach.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Długoletnia obecność biura na rynku"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Długoletnia obecność biura na rynku</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis20"
+                    >
+                      Długoletnia obecność biura na rynku
+                    </button>
+
+                    <p id="preferencjaOpis20" class="preferencja-opis">
+                      Współpraca z doświadczonym i rozpoznawalnym biurem.
+                    </p>
+                  </div>
+
+                  <div class="preferencja-element">
+                    <label class="preferencja-checkbox">
+                      <input
+                        class="preference"
+                        type="checkbox"
+                        value="Baza gotowych klientów"
+                      >
+                      <span class="tylko-czytnik">Wybierz: Baza gotowych klientów</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      class="preferencja-nazwa"
+                      aria-expanded="false"
+                      aria-controls="preferencjaOpis21"
+                    >
+                      Baza gotowych klientów
+                    </button>
+
+                    <p id="preferencjaOpis21" class="preferencja-opis">
+                      Dostęp do osób aktywnie poszukujących podobnej nieruchomości.
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <label class="zgoda-wycena">
-                <input
-                  type="checkbox"
-                  name="Zgoda na kontakt"
-                  value="Wyrażona"
-                  required
-                >
+              <div class="zgody-wycena">
+                <label class="zgoda-wycena">
+                  <input
+                    type="checkbox"
+                    id="consentEstimate"
+                    name="Zgoda na wycenę"
+                    value="Wyrażona"
+                    required
+                  >
 
-                <span>
-                  Wyrażam zgodę na kontakt dotyczący zgłoszenia
-                  i potwierdzam zapoznanie się z
-                  <a href="/polityka-prywatnosci/">
-                    polityką prywatności
-                  </a>.
-                </span>
-              </label>
+                  <span>
+                    Wyrażam zgodę na przetwarzanie moich danych osobowych w celu przygotowania orientacyjnej wyceny nieruchomości oraz kontaktu w sprawie przesłanego zgłoszenia. Potwierdzam zapoznanie się z
+                    <a href="polityka-prywatnosci.html" target="_blank" rel="noopener noreferrer">Polityką Prywatności serwisu LeadChecker</a>.
+                  </span>
+                </label>
+
+                <label class="zgoda-wycena">
+                  <input
+                    type="checkbox"
+                    id="consentPartners"
+                    name="Zgoda na partnerów"
+                    value="Wyrażona"
+                  >
+
+                  <span>
+                    Wyrażam zgodę na przekazanie moich danych kontaktowych oraz informacji o nieruchomości wybranym partnerom, sprawdzonym agentom i biurom nieruchomości współpracującym z serwisem LeadChecker, w celu kontaktu i przedstawienia spersonalizowanej oferty pośrednictwa w sprzedaży. Wiem, że w każdej chwili mogę cofnąć tę zgodę.
+                  </span>
+                </label>
+
+                <p class="informacja-rodo">
+                  Administratorem danych osobowych jest Paweł Linek, prowadzący działalność gospodarczą pod nazwą LinekCorp, NIP 7543276075. Więcej informacji znajduje się w
+                  <a href="polityka-prywatnosci.html" target="_blank" rel="noopener noreferrer">Polityce Prywatności</a>.
+                </p>
+              </div>
 
               <button class="przycisk-estymatora" type="submit">
                 Wyślij kod weryfikacyjny
@@ -1156,7 +1679,7 @@
 
             </form>
 
-            <div id="codeBox" class="kod-weryfikacyjny hidden">
+            <div id="codeBox" class="kod-weryfikacyjny hidden" data-progress-index="5" data-progress-name="Potwierdzenie email">
 
               <div class="kod-weryfikacyjny-naglowek">
                 <span>Kod został wysłany</span>
@@ -1303,6 +1826,7 @@
 </footer>
 
 <script src="script.js"></script>
-<script src="estymator.js?v=8"></script>
+<script src="google-places-config.js"></script>
+<script src="estymator.js?v=9"></script>
 </body>
 </html>

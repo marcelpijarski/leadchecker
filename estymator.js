@@ -39,7 +39,13 @@
     max: 0,
     cityRate: 0,
     rateSource: "",
-    lead: null
+    lead: null,
+    placesActive: false,
+    addressSelected: false,
+    placeId: "",
+    formattedAddress: "",
+    addressAutofill: false,
+    progressStage: 1
   };
 
   const qs = (selector, scope = document) => {
@@ -196,7 +202,54 @@
   return formatted;
 }
 
+  function validateSelectedAddress() {
+    if (state.placesActive && !state.addressSelected) {
+      const input = qs("#addressSearch");
+
+      if (input) {
+        input.focus();
+      }
+
+      throw new Error(
+        "Wybierz adres z listy podpowiedzi Google."
+      );
+    }
+  }
+
+  function buildingNumberValue() {
+    const input = qs("#buildingNumber");
+    const value = input
+      ? String(input.value || "").trim()
+      : "";
+
+    if (!value) {
+      if (input) {
+        input.focus();
+      }
+
+      throw new Error(
+        "Uzupełnij pole: numer budynku."
+      );
+    }
+
+    const match = value.match(/^(\d+)/);
+
+    if (!match || Number(match[1]) === 0) {
+      if (input) {
+        input.focus();
+      }
+
+      throw new Error(
+        "Numer budynku nie może mieć wartości 0."
+      );
+    }
+
+    return value;
+  }
+
   function addressPayload() {
+    validateSelectedAddress();
+
     if (state.type === "plot") {
       return {
         street: "brak",
@@ -211,7 +264,9 @@
         plotPostalCode: postalCodeValue(
           "plotPostalCode",
           "kod pocztowy działki"
-        )
+        ),
+        googlePlaceId: state.placeId || "brak",
+        addressVerified: state.addressSelected ? "Tak" : "Nie"
       };
     }
 
@@ -219,12 +274,9 @@
       street: requiredTextValue(
         "street",
         "ulica",
-        2
+        3
       ),
-      buildingNumber: requiredTextValue(
-        "buildingNumber",
-        "numer budynku"
-      ),
+      buildingNumber: buildingNumberValue(),
       apartmentNumber:
         valueOf("apartmentNumber") || "brak",
       postalCode: postalCodeValue(
@@ -233,7 +285,9 @@
       ),
       plotStreet: "brak",
       plotNumber: "brak",
-      plotPostalCode: "brak"
+      plotPostalCode: "brak",
+      googlePlaceId: state.placeId || "brak",
+      addressVerified: state.addressSelected ? "Tak" : "Nie"
     };
   }
 
@@ -579,6 +633,8 @@
     const nameInput = qs("#name");
     const emailInput = qs("#email");
     const phoneInput = qs("#phone");
+    const consentEstimate = qs("#consentEstimate");
+    const consentPartners = qs("#consentPartners");
 
     const name = nameInput
       ? nameInput.value.trim()
@@ -628,23 +684,512 @@
       );
     }
 
-    const consent = qs(
-      'input[name="Zgoda na kontakt"]'
-    );
-
-    if (consent && !consent.checked) {
-      consent.focus();
+    if (!consentEstimate || !consentEstimate.checked) {
+      if (consentEstimate) {
+        consentEstimate.focus();
+      }
 
       throw new Error(
-        "Zaznacz zgodę na kontakt."
+        "Zaznacz zgodę potrzebną do przygotowania wyceny."
       );
     }
 
     return {
       name: name,
       email: email,
-      phone: phone
+      phone: phone,
+      consentEstimate: "Tak",
+      consentPartners:
+        consentPartners && consentPartners.checked
+          ? "Tak"
+          : "Nie",
+      consentDate: new Date().toISOString(),
+      privacyVersion: "2026-08-03"
     };
+  }
+
+
+  function setProgress(index, name) {
+    const safeIndex = Math.min(5, Math.max(1, Number(index) || 1));
+    const progress = qs("#formProgress");
+    const text = qs("#progressStepText");
+    const title = qs("#progressStepName");
+    const bar = qs("#progressBar");
+
+    state.progressStage = safeIndex;
+
+    if (progress) {
+      progress.setAttribute(
+        "aria-valuenow",
+        String(safeIndex)
+      );
+    }
+
+    if (text) {
+      text.textContent =
+        "Krok " + safeIndex + " z 5";
+    }
+
+    if (title) {
+      title.textContent = name || "Formularz";
+    }
+
+    if (bar) {
+      bar.style.width =
+        String(safeIndex * 20) + "%";
+    }
+  }
+
+  function initProgress() {
+    const sections = qsa(
+      "#calculatorForm [data-progress-index]"
+    );
+
+    if (!("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (state.progressStage > 3) {
+          return;
+        }
+
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((first, second) => {
+            return second.intersectionRatio - first.intersectionRatio;
+          });
+
+        if (!visible.length) {
+          return;
+        }
+
+        const element = visible[0].target;
+        const index = Number(
+          element.dataset.progressIndex
+        );
+        const name =
+          element.dataset.progressName || "Formularz";
+
+        setProgress(index, name);
+      },
+      {
+        rootMargin: "-24% 0px -55% 0px",
+        threshold: [0.05, 0.25, 0.5]
+      }
+    );
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  }
+
+  function updatePreferenceLimit() {
+    const inputs = qsa(".preference");
+    const checked = inputs.filter(input => input.checked);
+    const counter = qs("#preferenceCounter");
+    const limitReached = checked.length >= 3;
+
+    inputs.forEach(input => {
+      input.disabled = limitReached && !input.checked;
+    });
+
+    if (counter) {
+      counter.textContent =
+        String(checked.length) + " z 3";
+    }
+  }
+
+  function initPreferences() {
+    qsa(".preference").forEach(input => {
+      input.addEventListener("change", event => {
+        const checked = qsa(".preference:checked");
+
+        if (checked.length > 3) {
+          event.currentTarget.checked = false;
+          window.alert(
+            "Możesz wybrać maksymalnie 3 opcje."
+          );
+        }
+
+        updatePreferenceLimit();
+      });
+    });
+
+    qsa(".preferencja-nazwa").forEach(button => {
+      button.addEventListener("click", () => {
+        const item = button.closest(
+          ".preferencja-element"
+        );
+
+        if (!item) {
+          return;
+        }
+
+        const open = !item.classList.contains(
+          "opis-otwarty"
+        );
+
+        qsa(".preferencja-element.opis-otwarty").forEach(other => {
+          other.classList.remove("opis-otwarty");
+          const otherButton = qs(
+            ".preferencja-nazwa",
+            other
+          );
+
+          if (otherButton) {
+            otherButton.setAttribute(
+              "aria-expanded",
+              "false"
+            );
+          }
+        });
+
+        item.classList.toggle(
+          "opis-otwarty",
+          open
+        );
+
+        button.setAttribute(
+          "aria-expanded",
+          String(open)
+        );
+      });
+    });
+
+    updatePreferenceLimit();
+  }
+
+  function campaignStorageKey(name) {
+    return "leadchecker_campaign_" + name;
+  }
+
+  function saveCampaignValue(name, value) {
+    if (!value) {
+      return;
+    }
+
+    sessionStorage.setItem(
+      campaignStorageKey(name),
+      String(value).slice(0, 500)
+    );
+  }
+
+  function readCampaignValue(name) {
+    return sessionStorage.getItem(
+      campaignStorageKey(name)
+    ) || "brak";
+  }
+
+  function captureCampaignData() {
+    const params = new URLSearchParams(
+      window.location.search
+    );
+
+    [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term"
+    ].forEach(name => {
+      saveCampaignValue(
+        name,
+        params.get(name)
+      );
+    });
+
+    saveCampaignValue(
+      "landing_page",
+      window.location.href
+    );
+
+    saveCampaignValue(
+      "referrer",
+      document.referrer || "wejście bezpośrednie"
+    );
+  }
+
+  function campaignPayload() {
+    const source = readCampaignValue(
+      "utm_source"
+    );
+
+    return {
+      trafficSource:
+        source !== "brak"
+          ? source
+          : readCampaignValue("referrer"),
+      utmSource: source,
+      utmMedium: readCampaignValue("utm_medium"),
+      utmCampaign: readCampaignValue("utm_campaign"),
+      utmContent: readCampaignValue("utm_content"),
+      utmTerm: readCampaignValue("utm_term"),
+      landingPage: readCampaignValue("landing_page"),
+      referrer: readCampaignValue("referrer")
+    };
+  }
+
+  function setAddressStatus(message, type) {
+    const status = qs("#addressStatus");
+
+    if (!status) {
+      return;
+    }
+
+    status.textContent = message;
+    status.classList.toggle(
+      "poprawny",
+      type === "success"
+    );
+    status.classList.toggle(
+      "blad",
+      type === "error"
+    );
+  }
+
+  function clearAddressSelection() {
+    if (state.addressAutofill) {
+      return;
+    }
+
+    state.addressSelected = false;
+    state.placeId = "";
+    state.formattedAddress = "";
+
+    const placeInput = qs("#googlePlaceId");
+
+    if (placeInput) {
+      placeInput.value = "";
+    }
+
+    if (state.placesActive) {
+      setAddressStatus(
+        "Wybierz adres z listy podpowiedzi.",
+        "error"
+      );
+    }
+  }
+
+  function addressComponent(components, types) {
+    for (const type of types) {
+      const component = components.find(item => {
+        return Array.isArray(item.types) &&
+          item.types.includes(type);
+      });
+
+      if (component) {
+        return component.long_name ||
+          component.short_name ||
+          "";
+      }
+    }
+
+    return "";
+  }
+
+  function fillAddressFromPlace(place) {
+    const components = Array.isArray(
+      place.address_components
+    )
+      ? place.address_components
+      : [];
+
+    const city = addressComponent(
+      components,
+      [
+        "locality",
+        "postal_town",
+        "administrative_area_level_3",
+        "sublocality_level_1"
+      ]
+    );
+
+    const street = addressComponent(
+      components,
+      ["route"]
+    );
+
+    const buildingNumber = addressComponent(
+      components,
+      ["street_number"]
+    );
+
+    const postalCode = addressComponent(
+      components,
+      ["postal_code"]
+    );
+
+    state.addressAutofill = true;
+
+    setInputValue("city", city);
+    setInputValue("street", street);
+    setInputValue(
+      "buildingNumber",
+      buildingNumber
+    );
+    setInputValue("postalCode", postalCode);
+    setInputValue("plotStreet", street);
+    setInputValue(
+      "plotPostalCode",
+      postalCode
+    );
+
+    state.addressAutofill = false;
+    state.addressSelected = true;
+    state.placeId = String(place.place_id || "");
+    state.formattedAddress = String(
+      place.formatted_address || ""
+    );
+
+    const searchInput = qs("#addressSearch");
+    const placeInput = qs("#googlePlaceId");
+
+    if (searchInput && state.formattedAddress) {
+      searchInput.value = state.formattedAddress;
+    }
+
+    if (placeInput) {
+      placeInput.value = state.placeId;
+    }
+
+    setAddressStatus(
+      "Adres został wybrany i zweryfikowany.",
+      "success"
+    );
+  }
+
+  function loadGooglePlaces() {
+    const key = String(
+      window.LEADCHECKER_GOOGLE_MAPS_KEY || ""
+    ).trim();
+
+    if (!key) {
+      console.info(
+        "Brak klucza Google Places. Formularz działa w trybie ręcznym."
+      );
+      return Promise.resolve(false);
+    }
+
+    if (
+      window.google &&
+      window.google.maps &&
+      window.google.maps.places
+    ) {
+      return Promise.resolve(true);
+    }
+
+    return new Promise(resolve => {
+      const script = document.createElement("script");
+      const params = new URLSearchParams({
+        key: key,
+        libraries: "places",
+        language: "pl",
+        region: "PL",
+        v: "weekly"
+      });
+
+      script.src =
+        "https://maps.googleapis.com/maps/api/js?" +
+        params.toString();
+      script.async = true;
+      script.defer = true;
+      script.addEventListener("load", () => {
+        resolve(Boolean(
+          window.google &&
+          window.google.maps &&
+          window.google.maps.places
+        ));
+      });
+      script.addEventListener("error", () => {
+        resolve(false);
+      });
+      document.head.appendChild(script);
+    });
+  }
+
+  async function initAddressAutocomplete() {
+    const input = qs("#addressSearch");
+
+    if (!input) {
+      return;
+    }
+
+    const loaded = await loadGooglePlaces();
+
+    if (!loaded) {
+      setAddressStatus(
+        "Autouzupełnianie uruchomimy po dodaniu klucza Google Places.",
+        ""
+      );
+      return;
+    }
+
+    state.placesActive = true;
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      input,
+      {
+        componentRestrictions: {
+          country: "pl"
+        },
+        fields: [
+          "address_components",
+          "formatted_address",
+          "place_id"
+        ],
+        types: ["geocode"]
+      }
+    );
+
+    autocomplete.addListener(
+      "place_changed",
+      () => {
+        const place = autocomplete.getPlace();
+
+        if (!place || !place.place_id) {
+          clearAddressSelection();
+          return;
+        }
+
+        fillAddressFromPlace(place);
+      }
+    );
+
+    input.addEventListener("input", () => {
+      if (
+        state.formattedAddress &&
+        input.value === state.formattedAddress
+      ) {
+        return;
+      }
+
+      clearAddressSelection();
+    });
+
+    [
+      "city",
+      "street",
+      "buildingNumber",
+      "postalCode",
+      "plotStreet",
+      "plotPostalCode"
+    ].forEach(id => {
+      const field = qs("#" + id);
+
+      if (field) {
+        field.addEventListener(
+          "input",
+          clearAddressSelection
+        );
+      }
+    });
+
+    setAddressStatus(
+      "Wpisz minimum 3 znaki i wybierz adres z podpowiedzi.",
+      ""
+    );
   }
 
   async function request(payload) {
@@ -865,6 +1410,10 @@
     });
 
     resetResult();
+    setProgress(
+      1,
+      "Lokalizacja"
+    );
   }
 
   function initTypeButtons() {
@@ -1012,6 +1561,11 @@
             "grid"
           );
 
+          setProgress(
+            4,
+            "Dane kontaktowe"
+          );
+
           setVisible(
             codeBox,
             false
@@ -1083,6 +1637,14 @@
                 rateSource:
                   state.rateSource,
                 reason: reasonValue(),
+                consentEstimate:
+                  contact.consentEstimate,
+                consentPartners:
+                  contact.consentPartners,
+                consentDate:
+                  contact.consentDate,
+                privacyVersion:
+                  contact.privacyVersion,
 
                 preferences:
                   checkedValues(
@@ -1101,7 +1663,8 @@
               },
 
               propertyPayload(),
-              addressPayload()
+              addressPayload(),
+              campaignPayload()
             );
 
           state.lead = payload;
@@ -1136,6 +1699,11 @@
           setVisible(
             codeBox,
             true
+          );
+
+          setProgress(
+            5,
+            "Potwierdzenie email"
           );
 
           scrollToElement(
@@ -1204,6 +1772,11 @@
     setVisible(
       qs("#codeBox"),
       false
+    );
+
+    setProgress(
+      5,
+      "Gotowe"
     );
 
     scrollToElement(
@@ -1544,11 +2117,15 @@ function initPostalCodeFormatting() {
     }
 
     try {
-     initTypeButtons();
+    captureCampaignData();
+    initTypeButtons();
     initPostalCodeFormatting();
+    initProgress();
+    initPreferences();
     initCalculator();
     initLeadForm();
     initVerifyForm();
+    initAddressAutocomplete();
 
       console.log(
         "Estymator LeadChecker został uruchomiony."
