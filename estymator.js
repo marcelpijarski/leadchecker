@@ -1129,19 +1129,19 @@
     state.placesActive = true;
 
     const autocomplete = new google.maps.places.Autocomplete(
-      input,
-      {
-        componentRestrictions: {
-          country: "pl"
-        },
-        fields: [
-          "address_components",
-          "formatted_address",
-          "place_id"
-        ],
-        types: ["geocode"]
-      }
-    );
+  input,
+  {
+    componentRestrictions: {
+      country: "pl"
+    },
+    fields: [
+      "address_components",
+      "formatted_address",
+      "place_id"
+    ],
+    types: ["address"]
+  }
+);
 
     autocomplete.addListener(
       "place_changed",
