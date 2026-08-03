@@ -1319,7 +1319,7 @@
     state.placesActive = true;
 
     input.placeholder =
-      "Np. Milejowice, Radomska 67";
+      "Np. Warszawa, Marszałkowska 10";
 
     const autocomplete =
       new google.maps.places.Autocomplete(
@@ -1414,7 +1414,7 @@
     });
 
     setAddressStatus(
-      "Wpisz miejscowość i adres w jednym polu, na przykład Milejowice, Radomska 67. Jeśli wybierzesz tylko miejscowość, brakujące dane uzupełnisz poniżej.",
+      "Wpisz miejscowość i adres w jednym polu, na przykład Warszawa, Marszałkowska 10. Jeśli wybierzesz tylko miejscowość, brakujące dane uzupełnisz poniżej.",
       ""
     );
   }
