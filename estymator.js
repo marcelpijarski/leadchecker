@@ -1319,7 +1319,7 @@
     state.placesActive = true;
 
     input.placeholder =
-      "Np. Warszawa, Marszałkowska 10";
+      "Np. Milejowice, Radomska 67";
 
     const autocomplete =
       new google.maps.places.Autocomplete(
@@ -1414,7 +1414,7 @@
     });
 
     setAddressStatus(
-      "Wpisz miejscowość i adres w jednym polu, na przykład Warszawa, Marszałkowska 10. Jeśli wybierzesz tylko miejscowość, brakujące dane uzupełnisz poniżej.",
+      "Wpisz miejscowość i adres w jednym polu, na przykład Milejowice, Radomska 67. Jeśli wybierzesz tylko miejscowość, brakujące dane uzupełnisz poniżej.",
       ""
     );
   }
@@ -2268,44 +2268,123 @@ function setInputValue(id, value) {
 }
 
 function prefillAddressFromHero() {
-  const savedAddress = sessionStorage.getItem(
+  const structuredValue = sessionStorage.getItem(
+    "leadcheckerAdresGoogle"
+  );
+
+  const legacyValue = sessionStorage.getItem(
     "leadcheckerAdresNieruchomosci"
   );
 
-  if (!savedAddress) {
+  let address = null;
+
+  if (structuredValue) {
+    try {
+      address = JSON.parse(structuredValue);
+    } catch (error) {
+      console.error(
+        "Nie udało się odczytać adresu ze strony głównej:",
+        error
+      );
+    }
+  }
+
+  if (address && address.city) {
+    state.addressAutofill = true;
+
+    setRawInputValue("city", address.city);
+    setRawInputValue("street", address.street || "");
+    setRawInputValue(
+      "buildingNumber",
+      address.buildingNumber || ""
+    );
+    setRawInputValue("postalCode", address.postalCode || "");
+    setRawInputValue("plotStreet", address.street || "");
+    setRawInputValue(
+      "plotPostalCode",
+      address.postalCode || ""
+    );
+
+    state.addressAutofill = false;
+    state.localitySelected = true;
+    state.addressSelected = Boolean(
+      address.street && address.buildingNumber
+    );
+    state.placeId = String(address.placeId || "");
+    state.localityPlaceId = state.placeId;
+    state.formattedAddress = String(
+      address.formattedAddress || legacyValue || ""
+    );
+
+    updatePlaceIdInput();
+
+    const searchInput = qs("#addressSearch");
+
+    if (searchInput) {
+      searchInput.value = state.formattedAddress;
+    }
+
+    if (state.addressSelected) {
+      setAddressStatus(
+        "Adres ze strony głównej został przeniesiony i zweryfikowany.",
+        "success"
+      );
+    } else {
+      setAddressStatus(
+        "Miejscowość została przeniesiona. Uzupełnij brakujące dane adresowe.",
+        "success"
+      );
+    }
+
+    sessionStorage.removeItem("leadcheckerAdresGoogle");
+    sessionStorage.removeItem("leadcheckerAdresNieruchomosci");
     return;
   }
 
-  const address = parseHeroAddress(savedAddress);
+  if (!legacyValue) {
+    return;
+  }
 
-  setInputValue("city", address.city);
-  setInputValue("street", address.street);
-  setInputValue(
+  const parsed = parseHeroAddress(legacyValue);
+
+  state.addressAutofill = true;
+
+  setRawInputValue("city", parsed.city);
+  setRawInputValue("street", parsed.street);
+  setRawInputValue(
     "buildingNumber",
-    address.buildingNumber
+    parsed.buildingNumber
   );
-  setInputValue(
+  setRawInputValue(
     "apartmentNumber",
-    address.apartmentNumber
+    parsed.apartmentNumber
   );
-  setInputValue(
-    "postalCode",
-    address.postalCode
-  );
-
-  setInputValue(
-    "plotStreet",
-    address.street
-  );
-
-  setInputValue(
+  setRawInputValue("postalCode", parsed.postalCode);
+  setRawInputValue("plotStreet", parsed.street);
+  setRawInputValue(
     "plotPostalCode",
-    address.postalCode
+    parsed.postalCode
   );
 
-  sessionStorage.removeItem(
-    "leadcheckerAdresNieruchomosci"
+  state.addressAutofill = false;
+  state.localitySelected = Boolean(parsed.city);
+  state.addressSelected = Boolean(
+    parsed.street && parsed.buildingNumber
   );
+  state.formattedAddress = legacyValue;
+
+  const searchInput = qs("#addressSearch");
+
+  if (searchInput) {
+    searchInput.value = legacyValue;
+  }
+
+  setAddressStatus(
+    "Adres ze strony głównej został przeniesiony. Sprawdź uzupełnione pola.",
+    "success"
+  );
+
+  sessionStorage.removeItem("leadcheckerAdresNieruchomosci");
 }
 
 function initPostalCodeFormatting() {
@@ -2339,21 +2418,22 @@ function initPostalCodeFormatting() {
   });
 }
 
-  function init() {
+  async function init() {
     if (!qs("#calculatorForm")) {
       return;
     }
 
     try {
-    captureCampaignData();
-    initTypeButtons();
-    initPostalCodeFormatting();
-    initProgress();
-    initPreferences();
-    initCalculator();
-    initLeadForm();
-    initVerifyForm();
-    initAddressAutocomplete();
+      captureCampaignData();
+      initTypeButtons();
+      initPostalCodeFormatting();
+      initProgress();
+      initPreferences();
+      initCalculator();
+      initLeadForm();
+      initVerifyForm();
+      await initAddressAutocomplete();
+      prefillAddressFromHero();
 
       console.log(
         "Estymator LeadChecker został uruchomiony."

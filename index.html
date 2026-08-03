@@ -55,9 +55,15 @@
                         type="text"
                         id="adresNieruchomosci"
                         name="adres"
-                        placeholder="Np. Warszawa, ul. Marszałkowska 10"
-                        autocomplete="street-address"
+                        placeholder="Np. Warszawa, Marszałkowska 10"
+                        autocomplete="off"
                         required
+                        >
+
+                        <input
+                        type="hidden"
+                        id="googlePlaceIdStart"
+                        name="googlePlaceId"
                         >
 
                         <span class="ikona-lokalizacji" aria-hidden="true">
@@ -540,6 +546,7 @@
   </div>
 </footer>
 
+<script src="google-places-config.js"></script>
 <script src="script.js"></script>    
 </body>
 </html>
