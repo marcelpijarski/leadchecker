@@ -42,16 +42,11 @@
     lead: null,
     placesActive: false,
     localitySelected: false,
-    streetSelected: false,
-    plotStreetSelected: false,
     addressSelected: false,
     placeId: "",
     localityPlaceId: "",
     formattedAddress: "",
-    localityBounds: null,
     addressAutofill: false,
-    streetAutocomplete: null,
-    plotStreetAutocomplete: null,
     progressStage: 1
   };
 
@@ -222,25 +217,11 @@
       }
 
       throw new Error(
-        "Wybierz miejscowość lub adres z listy podpowiedzi Google."
-      );
-    }
-
-    if (
-      state.type !== "plot" &&
-      !state.streetSelected
-    ) {
-      const input = qs("#street");
-
-      if (input) {
-        input.focus();
-      }
-
-      throw new Error(
-        "Wybierz ulicę lub dokładny adres z listy podpowiedzi Google."
+        "Wybierz miejscowość lub pełny adres z listy podpowiedzi Google."
       );
     }
   }
+
 
   function buildingNumberValue() {
     const input = qs("#buildingNumber");
@@ -292,7 +273,11 @@
           "kod pocztowy działki"
         ),
         googlePlaceId: state.placeId || "brak",
-        addressVerified: state.addressSelected ? "Tak" : "Nie"
+        addressVerified: state.addressSelected
+          ? "Tak"
+          : state.localitySelected
+            ? "Częściowo"
+            : "Nie"
       };
     }
 
@@ -313,7 +298,11 @@
       plotNumber: "brak",
       plotPostalCode: "brak",
       googlePlaceId: state.placeId || "brak",
-      addressVerified: state.addressSelected ? "Tak" : "Nie"
+      addressVerified: state.addressSelected
+        ? "Tak"
+        : state.localitySelected
+          ? "Częściowo"
+          : "Nie"
     };
   }
 
@@ -999,37 +988,11 @@
     }
   }
 
-  function clearStreetSelection(showMessage = true) {
-    if (state.addressAutofill) {
-      return;
-    }
 
-    state.streetSelected = false;
-    state.addressSelected = false;
-    state.placeId = state.localityPlaceId || "";
-    state.formattedAddress = "";
-    updatePlaceIdInput();
 
-    if (
-      showMessage &&
-      state.placesActive &&
-      state.localitySelected &&
-      state.type !== "plot"
-    ) {
-      setAddressStatus(
-        "Zacznij wpisywać ulicę i wybierz ją z podpowiedzi.",
-        "error"
-      );
-    }
-  }
 
-  function clearPlotStreetSelection() {
-    if (state.addressAutofill) {
-      return;
-    }
 
-    state.plotStreetSelected = false;
-  }
+
 
   function clearAddressSelection(showMessage = true) {
     if (state.addressAutofill) {
@@ -1037,13 +1000,10 @@
     }
 
     state.localitySelected = false;
-    state.streetSelected = false;
-    state.plotStreetSelected = false;
     state.addressSelected = false;
     state.placeId = "";
     state.localityPlaceId = "";
     state.formattedAddress = "";
-    state.localityBounds = null;
     updatePlaceIdInput();
 
     if (showMessage && state.placesActive) {
@@ -1053,6 +1013,7 @@
       );
     }
   }
+
 
   function addressComponent(components, types) {
     for (const type of types) {
@@ -1113,86 +1074,21 @@
     };
   }
 
-  function boundsFromPlace(place) {
-    if (
-      place.geometry &&
-      place.geometry.viewport
-    ) {
-      return place.geometry.viewport;
-    }
 
-    if (
-      place.geometry &&
-      place.geometry.location &&
-      window.google &&
-      window.google.maps
-    ) {
-      const location =
-        place.geometry.location;
 
-      const latitude =
-        typeof location.lat === "function"
-          ? location.lat()
-          : Number(location.lat);
 
-      const longitude =
-        typeof location.lng === "function"
-          ? location.lng()
-          : Number(location.lng);
 
-      if (
-        Number.isFinite(latitude) &&
-        Number.isFinite(longitude)
-      ) {
-        return new google.maps.LatLngBounds(
-          {
-            lat: latitude - 0.08,
-            lng: longitude - 0.08
-          },
-          {
-            lat: latitude + 0.08,
-            lng: longitude + 0.08
-          }
-        );
-      }
-    }
 
-    return null;
-  }
-
-  function applyLocalityBounds() {
-    if (!state.localityBounds) {
-      return;
-    }
-
-    [
-      state.streetAutocomplete,
-      state.plotStreetAutocomplete
-    ].forEach(autocomplete => {
-      if (
-        autocomplete &&
-        typeof autocomplete.setBounds === "function"
-      ) {
-        autocomplete.setBounds(
-          state.localityBounds
-        );
-      }
-    });
-  }
 
   function markLocality(place, city) {
     state.localitySelected = Boolean(city);
     state.localityPlaceId = String(
       place.place_id || ""
     );
-    state.localityBounds =
-      boundsFromPlace(place);
-    state.placeId =
-      state.localityPlaceId;
-
+    state.placeId = state.localityPlaceId;
     updatePlaceIdInput();
-    applyLocalityBounds();
   }
+
 
   function fillAddressFromMainPlace(place) {
     const parts = addressParts(place);
@@ -1219,77 +1115,66 @@
       parts.city
     );
 
-    if (parts.postalCode) {
-      setRawInputValue(
-        "postalCode",
-        parts.postalCode
-      );
-
-      setRawInputValue(
-        "plotPostalCode",
-        parts.postalCode
-      );
-    }
-
-    markLocality(
-      place,
-      parts.city
-    );
-
-    const hasStreetData = Boolean(
-      parts.street ||
-      parts.buildingNumber
-    );
-
-    if (hasStreetData) {
-      const verifiedStreet =
-        parts.street ||
-        parts.city;
-
+    if (parts.street) {
       setRawInputValue(
         "street",
-        verifiedStreet
+        parts.street
       );
       setRawInputValue(
         "plotStreet",
-        verifiedStreet
+        parts.street
       );
-
-      if (parts.buildingNumber) {
-        setRawInputValue(
-          "buildingNumber",
-          parts.buildingNumber
-        );
-      }
-
-      state.streetSelected = true;
-      state.plotStreetSelected = true;
-      state.addressSelected = true;
-      state.placeId = String(
-        place.place_id || ""
-      );
-      state.formattedAddress = formatted;
     } else {
       setRawInputValue(
         "street",
         ""
       );
       setRawInputValue(
-        "buildingNumber",
-        ""
-      );
-      setRawInputValue(
         "plotStreet",
         ""
       );
+    }
 
-      state.streetSelected = false;
-      state.plotStreetSelected = false;
-      state.addressSelected = false;
-      state.formattedAddress = formatted;
+    if (parts.buildingNumber) {
+      setRawInputValue(
+        "buildingNumber",
+        parts.buildingNumber
+      );
+    } else {
+      setRawInputValue(
+        "buildingNumber",
+        ""
+      );
+    }
+
+    if (parts.postalCode) {
+      setRawInputValue(
+        "postalCode",
+        parts.postalCode
+      );
+      setRawInputValue(
+        "plotPostalCode",
+        parts.postalCode
+      );
     }
 
     state.addressAutofill = false;
+
+    markLocality(
+      place,
+      parts.city
+    );
+
+    state.addressSelected = Boolean(
+      parts.street &&
+      parts.buildingNumber
+    );
+    state.placeId = String(
+      place.place_id ||
+      state.localityPlaceId ||
+      ""
+    );
+    state.formattedAddress = formatted;
     updatePlaceIdInput();
 
     const searchInput =
@@ -1299,141 +1184,55 @@
       searchInput.value = formatted;
     }
 
-    if (hasStreetData) {
+    if (
+      parts.street &&
+      parts.buildingNumber
+    ) {
       setAddressStatus(
-        "Adres został wybrany. Sprawdź numer budynku i kod pocztowy.",
+        "Pełny adres został wybrany. Sprawdź automatycznie uzupełnione pola.",
         "success"
       );
       return;
     }
 
+    if (parts.street) {
+      setAddressStatus(
+        "Ulica została rozpoznana. Uzupełnij numer budynku i brakujące dane.",
+        "success"
+      );
+
+      const buildingInput =
+        qs("#buildingNumber");
+
+      if (buildingInput) {
+        window.setTimeout(() => {
+          buildingInput.focus();
+        }, 100);
+      }
+      return;
+    }
+
     setAddressStatus(
-      "Miejscowość została wybrana. Teraz wpisz ulicę w polu poniżej i wybierz ją z podpowiedzi.",
+      "Miejscowość została wybrana. Uzupełnij ulicę, numer budynku i kod pocztowy w polach poniżej.",
       "success"
     );
 
-    const streetInput = qs(
+    const manualInput = qs(
       state.type === "plot"
         ? "#plotStreet"
         : "#street"
     );
 
-    if (streetInput) {
+    if (manualInput) {
       window.setTimeout(() => {
-        streetInput.focus();
+        manualInput.focus();
       }, 100);
     }
   }
 
-  function fillAddressFromStreetPlace(
-    place,
-    target
-  ) {
-    const parts = addressParts(place);
-    const currentCity = valueOf("city");
-    const city = parts.city || currentCity;
-    const verifiedStreet =
-      parts.street ||
-      (
-        parts.buildingNumber
-          ? city
-          : ""
-      );
 
-    if (!verifiedStreet) {
-      if (target === "plot") {
-        clearPlotStreetSelection();
-      } else {
-        clearStreetSelection(false);
-      }
 
-      setAddressStatus(
-        "Wybierz ulicę albo dokładny adres z listy podpowiedzi.",
-        "error"
-      );
-      return;
-    }
 
-    state.addressAutofill = true;
-
-    if (city) {
-      setRawInputValue(
-        "city",
-        city
-      );
-    }
-
-    if (target === "plot") {
-      setRawInputValue(
-        "plotStreet",
-        verifiedStreet
-      );
-
-      if (parts.postalCode) {
-        setRawInputValue(
-          "plotPostalCode",
-          parts.postalCode
-        );
-      }
-
-      state.plotStreetSelected = true;
-    } else {
-      setRawInputValue(
-        "street",
-        verifiedStreet
-      );
-
-      if (parts.buildingNumber) {
-        setRawInputValue(
-          "buildingNumber",
-          parts.buildingNumber
-        );
-      }
-
-      if (parts.postalCode) {
-        setRawInputValue(
-          "postalCode",
-          parts.postalCode
-        );
-      }
-
-      state.streetSelected = true;
-      state.addressSelected = true;
-    }
-
-    state.addressAutofill = false;
-    state.localitySelected = Boolean(city);
-    state.placeId = String(
-      place.place_id ||
-      state.localityPlaceId ||
-      ""
-    );
-    state.formattedAddress = String(
-      place.formatted_address ||
-      place.name ||
-      ""
-    );
-
-    updatePlaceIdInput();
-
-    const searchInput =
-      qs("#addressSearch");
-
-    if (
-      searchInput &&
-      state.formattedAddress
-    ) {
-      searchInput.value =
-        state.formattedAddress;
-    }
-
-    setAddressStatus(
-      target === "plot"
-        ? "Ulica działki została wybrana z podpowiedzi."
-        : "Ulica lub adres zostały wybrane. Uzupełnij brakujące dane.",
-      "success"
-    );
-  }
 
   function loadGooglePlaces() {
     const key = String(
@@ -1496,79 +1295,8 @@
     });
   }
 
-  function createStreetAutocomplete(
-    input,
-    target
-  ) {
-    if (!input) {
-      return null;
-    }
 
-    const autocomplete =
-      new google.maps.places.Autocomplete(
-        input,
-        {
-          componentRestrictions: {
-            country: "pl"
-          },
-          fields: [
-            "address_components",
-            "formatted_address",
-            "geometry",
-            "place_id",
-            "name",
-            "types"
-          ],
-          strictBounds: false,
-          types: ["geocode"]
-        }
-      );
 
-    if (state.localityBounds) {
-      autocomplete.setBounds(
-        state.localityBounds
-      );
-    }
-
-    autocomplete.addListener(
-      "place_changed",
-      () => {
-        const place =
-          autocomplete.getPlace();
-
-        if (!place || !place.place_id) {
-          if (target === "plot") {
-            clearPlotStreetSelection();
-          } else {
-            clearStreetSelection();
-          }
-          return;
-        }
-
-        fillAddressFromStreetPlace(
-          place,
-          target
-        );
-      }
-    );
-
-    input.addEventListener(
-      "input",
-      () => {
-        if (state.addressAutofill) {
-          return;
-        }
-
-        if (target === "plot") {
-          clearPlotStreetSelection();
-        } else {
-          clearStreetSelection();
-        }
-      }
-    );
-
-    return autocomplete;
-  }
 
   async function initAddressAutocomplete() {
     const input = qs("#addressSearch");
@@ -1591,7 +1319,7 @@
     state.placesActive = true;
 
     input.placeholder =
-      "Np. Wacyn albo Opole, Ozimska 10";
+      "Np. Milejowice, Radomska 67";
 
     const autocomplete =
       new google.maps.places.Autocomplete(
@@ -1603,25 +1331,12 @@
           fields: [
             "address_components",
             "formatted_address",
-            "geometry",
             "place_id",
             "name",
             "types"
           ],
           types: ["geocode"]
         }
-      );
-
-    state.streetAutocomplete =
-      createStreetAutocomplete(
-        qs("#street"),
-        "building"
-      );
-
-    state.plotStreetAutocomplete =
-      createStreetAutocomplete(
-        qs("#plotStreet"),
-        "plot"
       );
 
     autocomplete.addListener(
@@ -1665,62 +1380,45 @@
       );
     }
 
-    const buildingInput =
-      qs("#buildingNumber");
-
-    if (buildingInput) {
-      buildingInput.addEventListener(
-        "input",
-        () => {
-          if (state.addressAutofill) {
-            return;
-          }
-
-          if (
-            state.localitySelected &&
-            state.streetSelected
-          ) {
-            setAddressStatus(
-              "Ulica jest zweryfikowana. Sprawdź numer budynku.",
-              "success"
-            );
-          }
-        }
-      );
-    }
-
     [
+      "street",
+      "buildingNumber",
       "postalCode",
+      "plotStreet",
       "plotPostalCode"
     ].forEach(id => {
       const field = qs("#" + id);
 
-      if (field) {
-        field.addEventListener(
-          "input",
-          () => {
-            if (state.addressAutofill) {
-              return;
-            }
-
-            if (state.localitySelected) {
-              setAddressStatus(
-                state.type === "plot"
-                  ? "Miejscowość została wybrana. Sprawdź dane działki."
-                  : "Miejscowość i ulica są zweryfikowane. Sprawdź kod pocztowy.",
-                "success"
-              );
-            }
-          }
-        );
+      if (!field) {
+        return;
       }
+
+      field.addEventListener(
+        "input",
+        () => {
+          if (
+            state.addressAutofill ||
+            !state.localitySelected
+          ) {
+            return;
+          }
+
+          state.addressSelected = false;
+
+          setAddressStatus(
+            "Miejscowość jest zweryfikowana. Sprawdź ręcznie uzupełnione dane adresowe.",
+            "success"
+          );
+        }
+      );
     });
 
     setAddressStatus(
-      "Wybierz miejscowość lub wpisz pełny adres. Po wyborze małej miejscowości ulice pojawią się w polu Ulica.",
+      "Wpisz miejscowość i adres w jednym polu, na przykład Milejowice, Radomska 67. Jeśli wybierzesz tylko miejscowość, brakujące dane uzupełnisz poniżej.",
       ""
     );
   }
+
 
   async function request(payload) {
   const controller = new AbortController();
