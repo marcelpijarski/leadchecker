@@ -997,14 +997,16 @@
       : [];
 
     const city = addressComponent(
-      components,
-      [
-        "locality",
-        "postal_town",
-        "administrative_area_level_3",
-        "sublocality_level_1"
-      ]
-    );
+  components,
+  [
+    "locality",
+    "postal_town",
+    "sublocality",
+    "sublocality_level_1",
+    "administrative_area_level_3",
+    "administrative_area_level_4"
+  ]
+);
 
     const street = addressComponent(
       components,
@@ -1128,7 +1130,7 @@
 
     state.placesActive = true;
 
-    const autocomplete = new google.maps.places.Autocomplete(
+   const autocomplete = new google.maps.places.Autocomplete(
   input,
   {
     componentRestrictions: {
@@ -1137,9 +1139,10 @@
     fields: [
       "address_components",
       "formatted_address",
-      "place_id"
+      "place_id",
+      "name"
     ],
-    types: ["address"]
+    types: ["geocode"]
   }
 );
 
