@@ -5,6 +5,8 @@
   window.leadCheckerEstimatorLoaded = true;
 
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwH1LDUAUAHZJJgvwB9OdwX0mabiHGTs8OwPcYp4w1R1TjJEuSZLgwQDrO5vNdCyPXn/exec";
+  const CITY_DATA_URL = "miejscowosci_polska.json";
+  const CITY_RESULTS_LIMIT = 8;
 
   const RATES = {
     apartment: {
@@ -47,6 +49,7 @@
     localityPlaceId: "",
     formattedAddress: "",
     addressAutofill: false,
+    cityDatabaseSelected: false,
     progressStage: 1
   };
 
@@ -91,6 +94,18 @@
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9]+/g, "_")
       .replace(/^_+|_+$/g, "");
+  }
+
+  function normalizeSearchText(value) {
+    return String(value || "")
+      .trim()
+      .toLocaleLowerCase("pl")
+      .replace(/ł/g, "l")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   function averageRate(rates, fallback) {
@@ -210,14 +225,14 @@
     }
 
     if (!state.localitySelected) {
-      const input = qs("#addressSearch");
+      const input = qs("#city") || qs("#addressSearch");
 
       if (input) {
         input.focus();
       }
 
       throw new Error(
-        "Wybierz miejscowość lub pełny adres z listy podpowiedzi Google."
+        "Wybierz miejscowość z listy albo pełny adres z podpowiedzi Google."
       );
     }
   }
@@ -1004,6 +1019,7 @@
     state.placeId = "";
     state.localityPlaceId = "";
     state.formattedAddress = "";
+    state.cityDatabaseSelected = false;
     updatePlaceIdInput();
 
     if (showMessage && state.placesActive) {
@@ -1165,6 +1181,13 @@
       parts.city
     );
 
+    state.cityDatabaseSelected = false;
+
+    setCityStatus(
+      "Miejscowość uzupełniona na podstawie wybranego adresu.",
+      "success"
+    );
+
     state.addressSelected = Boolean(
       parts.street &&
       parts.buildingNumber
@@ -1233,6 +1256,583 @@
 
 
 
+
+
+  function setCityStatus(message, type) {
+    const status = qs("#cityStatus");
+
+    if (!status) {
+      return;
+    }
+
+    status.textContent = message;
+    status.classList.toggle(
+      "miejscowosc-status-poprawny",
+      type === "success"
+    );
+    status.classList.toggle(
+      "miejscowosc-status-blad",
+      type === "error"
+    );
+  }
+
+  async function loadCityDatabase() {
+    const response = await fetch(
+      CITY_DATA_URL,
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Nie udało się pobrać bazy miejscowości."
+      );
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error(
+        "Baza miejscowości ma nieprawidłowy format."
+      );
+    }
+
+    return data
+      .map(item => {
+        const name = String(
+          item && item.nazwa
+            ? item.nazwa
+            : ""
+        ).trim();
+
+        const voivodeship = String(
+          item && item.wojewodztwo
+            ? item.wojewodztwo
+            : ""
+        ).trim();
+
+        const county = String(
+          item && item.powiat
+            ? item.powiat
+            : ""
+        ).trim();
+
+        return {
+          name: name,
+          voivodeship: voivodeship,
+          county: county,
+          normalizedName:
+            normalizeSearchText(name)
+        };
+      })
+      .filter(item => {
+        return Boolean(
+          item.name &&
+          item.normalizedName
+        );
+      })
+      .sort((first, second) => {
+        return first.name.localeCompare(
+          second.name,
+          "pl"
+        );
+      });
+  }
+
+  function cityMatchScore(city, query) {
+    if (city.normalizedName === query) {
+      return 0;
+    }
+
+    if (city.normalizedName.startsWith(query)) {
+      return 1;
+    }
+
+    const words =
+      city.normalizedName.split(" ");
+
+    if (
+      words.some(word => {
+        return word.startsWith(query);
+      })
+    ) {
+      return 2;
+    }
+
+    if (city.normalizedName.includes(query)) {
+      return 3;
+    }
+
+    return 99;
+  }
+
+  function findMatchingCities(cities, value) {
+    const query =
+      normalizeSearchText(value);
+
+    if (query.length < 2) {
+      return [];
+    }
+
+    return cities
+      .map(city => {
+        return {
+          city: city,
+          score: cityMatchScore(
+            city,
+            query
+          )
+        };
+      })
+      .filter(item => {
+        return item.score < 99;
+      })
+      .sort((first, second) => {
+        if (first.score !== second.score) {
+          return first.score - second.score;
+        }
+
+        if (
+          first.city.name.length !==
+          second.city.name.length
+        ) {
+          return (
+            first.city.name.length -
+            second.city.name.length
+          );
+        }
+
+        return first.city.name.localeCompare(
+          second.city.name,
+          "pl"
+        );
+      })
+      .slice(0, CITY_RESULTS_LIMIT)
+      .map(item => {
+        return item.city;
+      });
+  }
+
+  async function initCityAutocomplete() {
+    const input = qs("#city");
+    const list = qs("#citySuggestions");
+
+    if (!input || !list) {
+      return;
+    }
+
+    let cities = [];
+    let results = [];
+    let activeIndex = -1;
+
+    function closeList() {
+      activeIndex = -1;
+      list.hidden = true;
+      input.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+      input.setAttribute(
+        "aria-activedescendant",
+        ""
+      );
+    }
+
+    function openList() {
+      list.hidden = false;
+      input.setAttribute(
+        "aria-expanded",
+        "true"
+      );
+    }
+
+    function setActiveIndex(index) {
+      const options = qsa(
+        ".miejscowosc-opcja",
+        list
+      );
+
+      if (!options.length) {
+        activeIndex = -1;
+        input.setAttribute(
+          "aria-activedescendant",
+          ""
+        );
+        return;
+      }
+
+      if (index < 0) {
+        activeIndex =
+          options.length - 1;
+      } else if (
+        index >= options.length
+      ) {
+        activeIndex = 0;
+      } else {
+        activeIndex = index;
+      }
+
+      options.forEach((option, optionIndex) => {
+        const active =
+          optionIndex === activeIndex;
+
+        option.classList.toggle(
+          "aktywna",
+          active
+        );
+
+        option.setAttribute(
+          "aria-selected",
+          String(active)
+        );
+      });
+
+      const activeOption =
+        options[activeIndex];
+
+      if (activeOption) {
+        input.setAttribute(
+          "aria-activedescendant",
+          activeOption.id
+        );
+
+        activeOption.scrollIntoView({
+          block: "nearest"
+        });
+      }
+    }
+
+    function clearOldAddressFields() {
+      state.addressAutofill = true;
+
+      [
+        "street",
+        "buildingNumber",
+        "apartmentNumber",
+        "postalCode",
+        "plotStreet",
+        "plotPostalCode"
+      ].forEach(id => {
+        setRawInputValue(id, "");
+      });
+
+      state.addressAutofill = false;
+    }
+
+    function selectCity(city) {
+      const hadAddress =
+        state.addressSelected ||
+        Boolean(state.placeId);
+
+      input.value = city.name;
+
+      if (hadAddress) {
+        clearOldAddressFields();
+      }
+
+      state.localitySelected = true;
+      state.addressSelected = false;
+      state.placeId = "";
+      state.localityPlaceId = "";
+      state.formattedAddress = "";
+      state.cityDatabaseSelected = true;
+      updatePlaceIdInput();
+
+      const searchInput =
+        qs("#addressSearch");
+
+      if (searchInput) {
+        searchInput.value = city.name;
+      }
+
+      setCityStatus(
+        city.name +
+        ", woj. " +
+        city.voivodeship,
+        "success"
+      );
+
+      setAddressStatus(
+        "Miejscowość została wybrana z bazy. Uzupełnij ulicę, numer budynku i kod pocztowy.",
+        "success"
+      );
+
+      closeList();
+
+      const nextInput = qs(
+        state.type === "plot"
+          ? "#plotStreet"
+          : "#street"
+      );
+
+      if (nextInput) {
+        window.setTimeout(() => {
+          nextInput.focus();
+        }, 80);
+      }
+    }
+
+    function renderResults(nextResults) {
+      results = nextResults;
+      activeIndex = -1;
+      list.replaceChildren();
+
+      if (!results.length) {
+        const empty =
+          document.createElement("div");
+
+        empty.className =
+          "miejscowosc-brak";
+
+        empty.textContent =
+          "Brak pasujących miejscowości. Możesz wybrać pełny adres z podpowiedzi Google.";
+
+        list.appendChild(empty);
+        openList();
+        return;
+      }
+
+      results.forEach((city, index) => {
+        const option =
+          document.createElement("button");
+
+        const name =
+          document.createElement("span");
+
+        const context =
+          document.createElement("span");
+
+        option.type = "button";
+        option.tabIndex = -1;
+        option.id =
+          "citySuggestion" + index;
+
+        option.className =
+          "miejscowosc-opcja";
+
+        option.setAttribute(
+          "role",
+          "option"
+        );
+
+        option.setAttribute(
+          "aria-selected",
+          "false"
+        );
+
+        name.className =
+          "miejscowosc-opcja-nazwa";
+
+        name.textContent = city.name;
+
+        context.className =
+          "miejscowosc-opcja-kontekst";
+
+        context.textContent =
+          "woj. " + city.voivodeship;
+
+        option.appendChild(name);
+        option.appendChild(context);
+
+        option.addEventListener(
+          "pointerdown",
+          event => {
+            event.preventDefault();
+            selectCity(city);
+          }
+        );
+
+        list.appendChild(option);
+      });
+
+      openList();
+    }
+
+    try {
+      cities =
+        await loadCityDatabase();
+
+      setCityStatus(
+        "Wpisz co najmniej 2 litery i wybierz miejscowość z listy.",
+        ""
+      );
+    } catch (error) {
+      console.error(error);
+
+      setCityStatus(
+        "Nie udało się wczytać listy miejscowości. Skorzystaj z pola pełnego adresu.",
+        "error"
+      );
+
+      return;
+    }
+
+    input.addEventListener(
+      "input",
+      () => {
+        if (state.addressAutofill) {
+          closeList();
+
+          setCityStatus(
+            "Miejscowość uzupełniona na podstawie wybranego adresu.",
+            "success"
+          );
+
+          return;
+        }
+
+        state.cityDatabaseSelected = false;
+
+        const query =
+          normalizeSearchText(
+            input.value
+          );
+
+        if (query.length < 2) {
+          closeList();
+
+          setCityStatus(
+            "Wpisz co najmniej 2 litery i wybierz miejscowość z listy.",
+            ""
+          );
+
+          return;
+        }
+
+        renderResults(
+          findMatchingCities(
+            cities,
+            input.value
+          )
+        );
+      }
+    );
+
+    input.addEventListener(
+      "focus",
+      () => {
+        const query =
+          normalizeSearchText(
+            input.value
+          );
+
+        if (
+          query.length >= 2 &&
+          !state.cityDatabaseSelected
+        ) {
+          renderResults(
+            findMatchingCities(
+              cities,
+              input.value
+            )
+          );
+        }
+      }
+    );
+
+    input.addEventListener(
+      "keydown",
+      event => {
+        if (
+          event.key === "ArrowDown"
+        ) {
+          const matches =
+            findMatchingCities(
+              cities,
+              input.value
+            );
+
+          if (!matches.length) {
+            return;
+          }
+
+          event.preventDefault();
+
+          if (list.hidden) {
+            renderResults(matches);
+          }
+
+          setActiveIndex(
+            activeIndex + 1
+          );
+          return;
+        }
+
+        if (
+          event.key === "ArrowUp"
+        ) {
+          const matches =
+            findMatchingCities(
+              cities,
+              input.value
+            );
+
+          if (!matches.length) {
+            return;
+          }
+
+          event.preventDefault();
+
+          if (list.hidden) {
+            renderResults(matches);
+          }
+
+          setActiveIndex(
+            activeIndex - 1
+          );
+          return;
+        }
+
+        if (
+          event.key === "Enter" &&
+          !list.hidden &&
+          results.length
+        ) {
+          event.preventDefault();
+
+          selectCity(
+            results[
+              activeIndex >= 0
+                ? activeIndex
+                : 0
+            ]
+          );
+          return;
+        }
+
+        if (event.key === "Escape") {
+          closeList();
+        }
+      }
+    );
+
+    input.addEventListener(
+      "blur",
+      () => {
+        window.setTimeout(
+          closeList,
+          120
+        );
+      }
+    );
+
+    document.addEventListener(
+      "pointerdown",
+      event => {
+        const wrapper = input.closest(
+          ".miejscowosc-autocomplete"
+        );
+
+        if (
+          wrapper &&
+          !wrapper.contains(event.target)
+        ) {
+          closeList();
+        }
+      }
+    );
+  }
 
   function loadGooglePlaces() {
     const key = String(
@@ -2324,6 +2924,13 @@ function prefillAddressFromHero() {
       searchInput.value = state.formattedAddress;
     }
 
+    state.cityDatabaseSelected = false;
+
+    setCityStatus(
+      "Miejscowość została przeniesiona ze strony głównej.",
+      "success"
+    );
+
     if (state.addressSelected) {
       setAddressStatus(
         "Adres ze strony głównej został przeniesiony i zweryfikowany.",
@@ -2379,6 +2986,11 @@ function prefillAddressFromHero() {
     searchInput.value = legacyValue;
   }
 
+  setCityStatus(
+    "Miejscowość została przeniesiona ze strony głównej.",
+    "success"
+  );
+
   setAddressStatus(
     "Adres ze strony głównej został przeniesiony. Sprawdź uzupełnione pola.",
     "success"
@@ -2432,6 +3044,7 @@ function initPostalCodeFormatting() {
       initCalculator();
       initLeadForm();
       initVerifyForm();
+      await initCityAutocomplete();
       await initAddressAutocomplete();
       prefillAddressFromHero();
 

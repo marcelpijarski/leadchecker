@@ -1,0 +1,1327 @@
+[
+  {
+    "nazwa": "Aleksandrów Łódzki",
+    "wojewodztwo": "łódzkie",
+    "powiat": "zgierski"
+  },
+  {
+    "nazwa": "Andrychów",
+    "wojewodztwo": "małopolskie",
+    "powiat": "wadowicki"
+  },
+  {
+    "nazwa": "Augustów",
+    "wojewodztwo": "podlaskie",
+    "powiat": "augustowski"
+  },
+  {
+    "nazwa": "Bełchatów",
+    "wojewodztwo": "łódzkie",
+    "powiat": "bełchatowski"
+  },
+  {
+    "nazwa": "Biała Podlaska",
+    "wojewodztwo": "lubelskie",
+    "powiat": "Biała Podlaska"
+  },
+  {
+    "nazwa": "Białystok",
+    "wojewodztwo": "podlaskie",
+    "powiat": "Białystok"
+  },
+  {
+    "nazwa": "Bielawa",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "dzierżoniowski"
+  },
+  {
+    "nazwa": "Bielsk Podlaski",
+    "wojewodztwo": "podlaskie",
+    "powiat": "bielski"
+  },
+  {
+    "nazwa": "Bielsko-Biała",
+    "wojewodztwo": "śląskie",
+    "powiat": "Bielsko-Biała"
+  },
+  {
+    "nazwa": "Biłgoraj",
+    "wojewodztwo": "lubelskie",
+    "powiat": "biłgorajski"
+  },
+  {
+    "nazwa": "Bochnia",
+    "wojewodztwo": "małopolskie",
+    "powiat": "bocheński"
+  },
+  {
+    "nazwa": "Bogatynia",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "zgorzelecki"
+  },
+  {
+    "nazwa": "Boguszów-Gorce",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "wałbrzyski"
+  },
+  {
+    "nazwa": "Bolesławiec",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "bolesławiecki"
+  },
+  {
+    "nazwa": "Brodnica",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "brodnicki"
+  },
+  {
+    "nazwa": "Brzeg",
+    "wojewodztwo": "opolskie",
+    "powiat": "brzeski"
+  },
+  {
+    "nazwa": "Brzeg Dolny",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "wołowsko-brzeski"
+  },
+  {
+    "nazwa": "Busko-Zdrój",
+    "wojewodztwo": "świętokrzyskie",
+    "powiat": "buski"
+  },
+  {
+    "nazwa": "Bydgoszcz",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "Bydgoszcz"
+  },
+  {
+    "nazwa": "Bystrzyca Kłodzka",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "kłodzki"
+  },
+  {
+    "nazwa": "Bytom",
+    "wojewodztwo": "śląskie",
+    "powiat": "Bytom"
+  },
+  {
+    "nazwa": "Będzin",
+    "wojewodztwo": "śląskie",
+    "powiat": "będziński"
+  },
+  {
+    "nazwa": "Chełm",
+    "wojewodztwo": "lubelskie",
+    "powiat": "Chełm"
+  },
+  {
+    "nazwa": "Chełmno",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "chełmiński"
+  },
+  {
+    "nazwa": "Chełmża",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "toruński"
+  },
+  {
+    "nazwa": "Chojnice",
+    "wojewodztwo": "pomorskie",
+    "powiat": "chojnicki"
+  },
+  {
+    "nazwa": "Chojnów",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "legnicki"
+  },
+  {
+    "nazwa": "Chorzów",
+    "wojewodztwo": "śląskie",
+    "powiat": "Chorzów"
+  },
+  {
+    "nazwa": "Chrzanów",
+    "wojewodztwo": "małopolskie",
+    "powiat": "chrzanowski"
+  },
+  {
+    "nazwa": "Ciechanów",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "ciechanowski"
+  },
+  {
+    "nazwa": "Cieszyn",
+    "wojewodztwo": "śląskie",
+    "powiat": "cieszyński"
+  },
+  {
+    "nazwa": "Czechowice-Dziedzice",
+    "wojewodztwo": "śląskie",
+    "powiat": "bielski"
+  },
+  {
+    "nazwa": "Częstochowa",
+    "wojewodztwo": "śląskie",
+    "powiat": "Częstochowa"
+  },
+  {
+    "nazwa": "Dzierżoniów",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "dzierżoniowski"
+  },
+  {
+    "nazwa": "Dąbrowa Górnicza",
+    "wojewodztwo": "śląskie",
+    "powiat": "Dąbrowa Górnicza"
+  },
+  {
+    "nazwa": "Dębica",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "dębicki"
+  },
+  {
+    "nazwa": "Dęblin",
+    "wojewodztwo": "lubelskie",
+    "powiat": "rycki"
+  },
+  {
+    "nazwa": "Długołęka",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "wrocławski"
+  },
+  {
+    "nazwa": "Elbląg",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "Elbląg"
+  },
+  {
+    "nazwa": "Ełk",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "ełcki"
+  },
+  {
+    "nazwa": "Gdańsk",
+    "wojewodztwo": "pomorskie",
+    "powiat": "Gdańsk"
+  },
+  {
+    "nazwa": "Gdynia",
+    "wojewodztwo": "pomorskie",
+    "powiat": "Gdynia"
+  },
+  {
+    "nazwa": "Giżycko",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "giżycki"
+  },
+  {
+    "nazwa": "Gliwice",
+    "wojewodztwo": "śląskie",
+    "powiat": "Gliwice"
+  },
+  {
+    "nazwa": "Gniezno",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "gnieźnieński"
+  },
+  {
+    "nazwa": "Goleniów",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "goleniowski"
+  },
+  {
+    "nazwa": "Gorlice",
+    "wojewodztwo": "małopolskie",
+    "powiat": "gorlicki"
+  },
+  {
+    "nazwa": "Gorzów Wielkopolski",
+    "wojewodztwo": "lubuskie",
+    "powiat": "Gorzów Wielkopolski"
+  },
+  {
+    "nazwa": "Gostynin",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "gostyniński"
+  },
+  {
+    "nazwa": "Grajewo",
+    "wojewodztwo": "podlaskie",
+    "powiat": "grajewski"
+  },
+  {
+    "nazwa": "Grodków",
+    "wojewodztwo": "opolskie",
+    "powiat": "brzeski"
+  },
+  {
+    "nazwa": "Grodzisk Mazowiecki",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "grodziski"
+  },
+  {
+    "nazwa": "Grudziądz",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "Grudziądz"
+  },
+  {
+    "nazwa": "Gryfino",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "gryfiński"
+  },
+  {
+    "nazwa": "Głogów",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "głogowski"
+  },
+  {
+    "nazwa": "Głubczyce",
+    "wojewodztwo": "opolskie",
+    "powiat": "głubczycki"
+  },
+  {
+    "nazwa": "Głuchołazy",
+    "wojewodztwo": "opolskie",
+    "powiat": "nyski"
+  },
+  {
+    "nazwa": "Hajnówka",
+    "wojewodztwo": "podlaskie",
+    "powiat": "hajnowski"
+  },
+  {
+    "nazwa": "Hel",
+    "wojewodztwo": "pomorskie",
+    "powiat": "pucki"
+  },
+  {
+    "nazwa": "Hrubieszów",
+    "wojewodztwo": "lubelskie",
+    "powiat": "hrubieszowski"
+  },
+  {
+    "nazwa": "Inowrocław",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "inowrocławski"
+  },
+  {
+    "nazwa": "Iława",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "iławski"
+  },
+  {
+    "nazwa": "Jarocin",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "jarociński"
+  },
+  {
+    "nazwa": "Jarosław",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "jarosławski"
+  },
+  {
+    "nazwa": "Jastrzębie-Zdrój",
+    "wojewodztwo": "śląskie",
+    "powiat": "Jastrzębie-Zdrój"
+  },
+  {
+    "nazwa": "Jasło",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "jasielski"
+  },
+  {
+    "nazwa": "Jawor",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "jaworski"
+  },
+  {
+    "nazwa": "Jaworzno",
+    "wojewodztwo": "śląskie",
+    "powiat": "Jaworzno"
+  },
+  {
+    "nazwa": "Jelenia Góra",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "Jelenia Góra"
+  },
+  {
+    "nazwa": "Józefów",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "otwocki"
+  },
+  {
+    "nazwa": "Kalisz",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "Kalisz"
+  },
+  {
+    "nazwa": "Kamienna Góra",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "kamiennogórski"
+  },
+  {
+    "nazwa": "Karpacz",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "jeleniogórski"
+  },
+  {
+    "nazwa": "Katowice",
+    "wojewodztwo": "śląskie",
+    "powiat": "Katowice"
+  },
+  {
+    "nazwa": "Kielce",
+    "wojewodztwo": "świętokrzyskie",
+    "powiat": "Kielce"
+  },
+  {
+    "nazwa": "Kluczbork",
+    "wojewodztwo": "opolskie",
+    "powiat": "kluczborski"
+  },
+  {
+    "nazwa": "Knurów",
+    "wojewodztwo": "śląskie",
+    "powiat": "gliwicki"
+  },
+  {
+    "nazwa": "Kobyłka",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "wołomiński"
+  },
+  {
+    "nazwa": "Konin",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "Konin"
+  },
+  {
+    "nazwa": "Konstancin-Jeziorna",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "piaseczyński"
+  },
+  {
+    "nazwa": "Kostrzyn nad Odrą",
+    "wojewodztwo": "lubuskie",
+    "powiat": "gorzowski"
+  },
+  {
+    "nazwa": "Koszalin",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "Koszalin"
+  },
+  {
+    "nazwa": "Kowary",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "jeleniogórski"
+  },
+  {
+    "nazwa": "Kozienice",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "kozienicki"
+  },
+  {
+    "nazwa": "Kołobrzeg",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "kołobrzeski"
+  },
+  {
+    "nazwa": "Końskie",
+    "wojewodztwo": "świętokrzyskie",
+    "powiat": "konecki"
+  },
+  {
+    "nazwa": "Kościerzyna",
+    "wojewodztwo": "pomorskie",
+    "powiat": "kościerski"
+  },
+  {
+    "nazwa": "Kraków",
+    "wojewodztwo": "małopolskie",
+    "powiat": "Kraków"
+  },
+  {
+    "nazwa": "Krapkowice",
+    "wojewodztwo": "opolskie",
+    "powiat": "krapkowicki"
+  },
+  {
+    "nazwa": "Krasnystaw",
+    "wojewodztwo": "lubelskie",
+    "powiat": "krasnostawski"
+  },
+  {
+    "nazwa": "Kraśnik",
+    "wojewodztwo": "lubelskie",
+    "powiat": "kraśnicki"
+  },
+  {
+    "nazwa": "Krosno",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "Krosno"
+  },
+  {
+    "nazwa": "Krotoszyn",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "krotoszyński"
+  },
+  {
+    "nazwa": "Kutno",
+    "wojewodztwo": "łódzkie",
+    "powiat": "kutnowski"
+  },
+  {
+    "nazwa": "Kwidzyn",
+    "wojewodztwo": "pomorskie",
+    "powiat": "kwidzyński"
+  },
+  {
+    "nazwa": "Kędzierzyn-Koźle",
+    "wojewodztwo": "opolskie",
+    "powiat": "kędzierzyńsko-kozielski"
+  },
+  {
+    "nazwa": "Kętrzyn",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "kętrzyński"
+  },
+  {
+    "nazwa": "Kęty",
+    "wojewodztwo": "małopolskie",
+    "powiat": "oświęcimski"
+  },
+  {
+    "nazwa": "Kłodzko",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "kłodzki"
+  },
+  {
+    "nazwa": "Legionowo",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "legionowski"
+  },
+  {
+    "nazwa": "Legnica",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "Legnica"
+  },
+  {
+    "nazwa": "Leszno",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "Leszno"
+  },
+  {
+    "nazwa": "Limmanowa",
+    "wojewodztwo": "małopolskie",
+    "powiat": "limanowski"
+  },
+  {
+    "nazwa": "Lipno",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "lipnowski"
+  },
+  {
+    "nazwa": "Lubartów",
+    "wojewodztwo": "lubelskie",
+    "powiat": "lubartowski"
+  },
+  {
+    "nazwa": "Lubań",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "lubański"
+  },
+  {
+    "nazwa": "Lubin",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "lubiński"
+  },
+  {
+    "nazwa": "Lublin",
+    "wojewodztwo": "lubelskie",
+    "powiat": "Lublin"
+  },
+  {
+    "nazwa": "Luboń",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "poznański"
+  },
+  {
+    "nazwa": "Lębork",
+    "wojewodztwo": "pomorskie",
+    "powiat": "lęborski"
+  },
+  {
+    "nazwa": "Malbork",
+    "wojewodztwo": "pomorskie",
+    "powiat": "malborski"
+  },
+  {
+    "nazwa": "Marki",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "wołomiński"
+  },
+  {
+    "nazwa": "Mielec",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "mielecki"
+  },
+  {
+    "nazwa": "Mikołów",
+    "wojewodztwo": "śląskie",
+    "powiat": "mikołowski"
+  },
+  {
+    "nazwa": "Milicz",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "milicki"
+  },
+  {
+    "nazwa": "Międzyrzecz",
+    "wojewodztwo": "lubuskie",
+    "powiat": "międzyrzecki"
+  },
+  {
+    "nazwa": "Mińsk Mazowiecki",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "miński"
+  },
+  {
+    "nazwa": "Mrągowo",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "mrągowski"
+  },
+  {
+    "nazwa": "Mysłowice",
+    "wojewodztwo": "śląskie",
+    "powiat": "Mysłowice"
+  },
+  {
+    "nazwa": "Myślenice",
+    "wojewodztwo": "małopolskie",
+    "powiat": "myślenicki"
+  },
+  {
+    "nazwa": "Mława",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "mławski"
+  },
+  {
+    "nazwa": "Nakło nad Notecią",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "nakielski"
+  },
+  {
+    "nazwa": "Namysłów",
+    "wojewodztwo": "opolskie",
+    "powiat": "namysłowski"
+  },
+  {
+    "nazwa": "Niepołomice",
+    "wojewodztwo": "małopolskie",
+    "powiat": "wielicki"
+  },
+  {
+    "nazwa": "Nisko",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "niżański"
+  },
+  {
+    "nazwa": "Nowa Ruda",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "kłodzki"
+  },
+  {
+    "nazwa": "Nowa Sól",
+    "wojewodztwo": "lubuskie",
+    "powiat": "nowosolski"
+  },
+  {
+    "nazwa": "Nowy Dwór Mazowiecki",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "nowodworski"
+  },
+  {
+    "nazwa": "Nowy Sącz",
+    "wojewodztwo": "małopolskie",
+    "powiat": "Nowy Sącz"
+  },
+  {
+    "nazwa": "Nowy Targ",
+    "wojewodztwo": "małopolskie",
+    "powiat": "nowotarski"
+  },
+  {
+    "nazwa": "Nysa",
+    "wojewodztwo": "opolskie",
+    "powiat": "nyski"
+  },
+  {
+    "nazwa": "Olesno",
+    "wojewodztwo": "opolskie",
+    "powiat": "oleski"
+  },
+  {
+    "nazwa": "Oleśnica",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "oleśnicki"
+  },
+  {
+    "nazwa": "Olkusz",
+    "wojewodztwo": "małopolskie",
+    "powiat": "olkuski"
+  },
+  {
+    "nazwa": "Olsztyn",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "Olsztyn"
+  },
+  {
+    "nazwa": "Opoczno",
+    "wojewodztwo": "łódzkie",
+    "powiat": "opoczyński"
+  },
+  {
+    "nazwa": "Opole",
+    "wojewodztwo": "opolskie",
+    "powiat": "Opole"
+  },
+  {
+    "nazwa": "Opole Lubelskie",
+    "wojewodztwo": "lubelskie",
+    "powiat": "opolski"
+  },
+  {
+    "nazwa": "Ostrowiec Świętokrzyski",
+    "wojewodztwo": "świętokrzyskie",
+    "powiat": "ostrowiecki"
+  },
+  {
+    "nazwa": "Ostrołęka",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "Ostrołęka"
+  },
+  {
+    "nazwa": "Ostróda",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "ostródzki"
+  },
+  {
+    "nazwa": "Ostrów Mazowiecka",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "ostrowski"
+  },
+  {
+    "nazwa": "Ostrów Wielkopolski",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "ostrowski"
+  },
+  {
+    "nazwa": "Otwock",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "otwocki"
+  },
+  {
+    "nazwa": "Ozimek",
+    "wojewodztwo": "opolskie",
+    "powiat": "opolski"
+  },
+  {
+    "nazwa": "Oława",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "oławski"
+  },
+  {
+    "nazwa": "Oświęcim",
+    "wojewodztwo": "małopolskie",
+    "powiat": "oświęcimski"
+  },
+  {
+    "nazwa": "Pabianice",
+    "wojewodztwo": "łódzkie",
+    "powiat": "pabianicki"
+  },
+  {
+    "nazwa": "Piaseczno",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "piaseczyński"
+  },
+  {
+    "nazwa": "Piastów",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "pruszkowski"
+  },
+  {
+    "nazwa": "Piekary Śląskie",
+    "wojewodztwo": "śląskie",
+    "powiat": "Piekary Śląskie"
+  },
+  {
+    "nazwa": "Pionki",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "radomski"
+  },
+  {
+    "nazwa": "Piotrków Trybunalski",
+    "wojewodztwo": "łódzkie",
+    "powiat": "Piotrków Trybunalski"
+  },
+  {
+    "nazwa": "Piła",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "pilski"
+  },
+  {
+    "nazwa": "Police",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "policki"
+  },
+  {
+    "nazwa": "Polkowice",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "polkowicki"
+  },
+  {
+    "nazwa": "Poznań",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "Poznań"
+  },
+  {
+    "nazwa": "Prudnik",
+    "wojewodztwo": "opolskie",
+    "powiat": "prudnicki"
+  },
+  {
+    "nazwa": "Pruszcz Gdański",
+    "wojewodztwo": "pomorskie",
+    "powiat": "gdański"
+  },
+  {
+    "nazwa": "Pruszków",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "pruszkowski"
+  },
+  {
+    "nazwa": "Przemyśl",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "Przemyśl"
+  },
+  {
+    "nazwa": "Przeworsk",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "przeworski"
+  },
+  {
+    "nazwa": "Puck",
+    "wojewodztwo": "pomorskie",
+    "powiat": "pucki"
+  },
+  {
+    "nazwa": "Puławy",
+    "wojewodztwo": "lubelskie",
+    "powiat": "puławski"
+  },
+  {
+    "nazwa": "Pułtusk",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "pułtuski"
+  },
+  {
+    "nazwa": "Płock",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "Płock"
+  },
+  {
+    "nazwa": "Płońsk",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "płoński"
+  },
+  {
+    "nazwa": "Racibórz",
+    "wojewodztwo": "śląskie",
+    "powiat": "raciborski"
+  },
+  {
+    "nazwa": "Radom",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "Radom"
+  },
+  {
+    "nazwa": "Radomsko",
+    "wojewodztwo": "łódzkie",
+    "powiat": "radomszczański"
+  },
+  {
+    "nazwa": "Radzyń Podlaski",
+    "wojewodztwo": "lubelskie",
+    "powiat": "radzyński"
+  },
+  {
+    "nazwa": "Reda",
+    "wojewodztwo": "pomorskie",
+    "powiat": "wejherowski"
+  },
+  {
+    "nazwa": "Ropczyce",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "ropczycko-sędziszowski"
+  },
+  {
+    "nazwa": "Ruda Śląska",
+    "wojewodztwo": "śląskie",
+    "powiat": "Ruda Śląska"
+  },
+  {
+    "nazwa": "Rumia",
+    "wojewodztwo": "pomorskie",
+    "powiat": "wejherowski"
+  },
+  {
+    "nazwa": "Rybnik",
+    "wojewodztwo": "śląskie",
+    "powiat": "Rybnik"
+  },
+  {
+    "nazwa": "Rypin",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "rypiński"
+  },
+  {
+    "nazwa": "Rzeszów",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "Rzeszów"
+  },
+  {
+    "nazwa": "Sandomierz",
+    "wojewodztwo": "świętokrzyskie",
+    "powiat": "sandomierski"
+  },
+  {
+    "nazwa": "Sanok",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "sanocki"
+  },
+  {
+    "nazwa": "Siedlce",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "Siedlce"
+  },
+  {
+    "nazwa": "Siemianowice Śląskie",
+    "wojewodztwo": "śląskie",
+    "powiat": "Siemianowice Śląskie"
+  },
+  {
+    "nazwa": "Sieradz",
+    "wojewodztwo": "łódzkie",
+    "powiat": "sieradzki"
+  },
+  {
+    "nazwa": "Sierpc",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "sierpecki"
+  },
+  {
+    "nazwa": "Skarżysko-Kamienna",
+    "wojewodztwo": "świętokrzyskie",
+    "powiat": "skarżyski"
+  },
+  {
+    "nazwa": "Skawina",
+    "wojewodztwo": "małopolskie",
+    "powiat": "krakowski"
+  },
+  {
+    "nazwa": "Skierniewice",
+    "wojewodztwo": "łódzkie",
+    "powiat": "Skierniewice"
+  },
+  {
+    "nazwa": "Sochaczew",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "sochaczewski"
+  },
+  {
+    "nazwa": "Sokółka",
+    "wojewodztwo": "podlaskie",
+    "powiat": "sokólski"
+  },
+  {
+    "nazwa": "Solec Kujawski",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "bydgoski"
+  },
+  {
+    "nazwa": "Sopot",
+    "wojewodztwo": "pomorskie",
+    "powiat": "Sopot"
+  },
+  {
+    "nazwa": "Sosnowiec",
+    "wojewodztwo": "śląskie",
+    "powiat": "Sosnowiec"
+  },
+  {
+    "nazwa": "Stalowa Wola",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "stalowowolski"
+  },
+  {
+    "nazwa": "Starachowice",
+    "wojewodztwo": "świętokrzyskie",
+    "powiat": "starachowicki"
+  },
+  {
+    "nazwa": "Stargard",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "stargardzki"
+  },
+  {
+    "nazwa": "Starogard Gdański",
+    "wojewodztwo": "pomorskie",
+    "powiat": "starogardzki"
+  },
+  {
+    "nazwa": "Strzegom",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "świdnicki"
+  },
+  {
+    "nazwa": "Strzelce Opolskie",
+    "wojewodztwo": "opolskie",
+    "powiat": "strzelecki"
+  },
+  {
+    "nazwa": "Sulejówek",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "miński"
+  },
+  {
+    "nazwa": "Suwałki",
+    "wojewodztwo": "podlaskie",
+    "powiat": "Suwałki"
+  },
+  {
+    "nazwa": "Swarzędz",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "poznański"
+  },
+  {
+    "nazwa": "Syców",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "oleśnicki"
+  },
+  {
+    "nazwa": "Szczecin",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "Szczecin"
+  },
+  {
+    "nazwa": "Szczecinek",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "szczecinecki"
+  },
+  {
+    "nazwa": "Szczytno",
+    "wojewodztwo": "warmińsko-mazurskie",
+    "powiat": "szczycieński"
+  },
+  {
+    "nazwa": "Szklarska Poręba",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "jeleniogórski"
+  },
+  {
+    "nazwa": "Słubice",
+    "wojewodztwo": "lubuskie",
+    "powiat": "słubicki"
+  },
+  {
+    "nazwa": "Słupsk",
+    "wojewodztwo": "pomorskie",
+    "powiat": "Słupsk"
+  },
+  {
+    "nazwa": "Tarnobrzeg",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "Tarnobrzeg"
+  },
+  {
+    "nazwa": "Tarnowskie Góry",
+    "wojewodztwo": "śląskie",
+    "powiat": "tarnogórski"
+  },
+  {
+    "nazwa": "Tarnów",
+    "wojewodztwo": "małopolskie",
+    "powiat": "Tarnów"
+  },
+  {
+    "nazwa": "Tczew",
+    "wojewodztwo": "pomorskie",
+    "powiat": "tczewski"
+  },
+  {
+    "nazwa": "Tomaszów Lubelski",
+    "wojewodztwo": "lubelskie",
+    "powiat": "tomaszowski"
+  },
+  {
+    "nazwa": "Tomaszów Mazowiecki",
+    "wojewodztwo": "łódzkie",
+    "powiat": "tomaszowski"
+  },
+  {
+    "nazwa": "Toruń",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "Toruń"
+  },
+  {
+    "nazwa": "Trzebinia",
+    "wojewodztwo": "małopolskie",
+    "powiat": "chrzanowski"
+  },
+  {
+    "nazwa": "Trzebnica",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "trzebnicki"
+  },
+  {
+    "nazwa": "Tychy",
+    "wojewodztwo": "śląskie",
+    "powiat": "Tychy"
+  },
+  {
+    "nazwa": "Wadowice",
+    "wojewodztwo": "małopolskie",
+    "powiat": "wadowicki"
+  },
+  {
+    "nazwa": "Warszawa",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "Warszawa"
+  },
+  {
+    "nazwa": "Wałbrzych",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "Wałbrzych"
+  },
+  {
+    "nazwa": "Wałcz",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "wałecki"
+  },
+  {
+    "nazwa": "Wejherowo",
+    "wojewodztwo": "pomorskie",
+    "powiat": "wejherowski"
+  },
+  {
+    "nazwa": "Wieliczka",
+    "wojewodztwo": "małopolskie",
+    "powiat": "wielicki"
+  },
+  {
+    "nazwa": "Wieluń",
+    "wojewodztwo": "łódzkie",
+    "powiat": "wieluński"
+  },
+  {
+    "nazwa": "Wodzisław Śląski",
+    "wojewodztwo": "śląskie",
+    "powiat": "wodzisławski"
+  },
+  {
+    "nazwa": "Wołomin",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "wołomiński"
+  },
+  {
+    "nazwa": "Wrocław",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "Wrocław"
+  },
+  {
+    "nazwa": "Września",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "wrzesiński"
+  },
+  {
+    "nazwa": "Wyszków",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "wyszkowski"
+  },
+  {
+    "nazwa": "Wągrowiec",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "wągrowiecki"
+  },
+  {
+    "nazwa": "Włocławek",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "Włocławek"
+  },
+  {
+    "nazwa": "Zabrze",
+    "wojewodztwo": "śląskie",
+    "powiat": "Zabrze"
+  },
+  {
+    "nazwa": "Zakopane",
+    "wojewodztwo": "małopolskie",
+    "powiat": "tatrzański"
+  },
+  {
+    "nazwa": "Zambrów",
+    "wojewodztwo": "podlaskie",
+    "powiat": "zambrowski"
+  },
+  {
+    "nazwa": "Zamość",
+    "wojewodztwo": "lubelskie",
+    "powiat": "Zamość"
+  },
+  {
+    "nazwa": "Zawadzkie",
+    "wojewodztwo": "opolskie",
+    "powiat": "strzelecki"
+  },
+  {
+    "nazwa": "Zawiercie",
+    "wojewodztwo": "śląskie",
+    "powiat": "zawierciański"
+  },
+  {
+    "nazwa": "Zduńska Wola",
+    "wojewodztwo": "łódzkie",
+    "powiat": "zduńskowolski"
+  },
+  {
+    "nazwa": "Zdzieszowice",
+    "wojewodztwo": "opolskie",
+    "powiat": "krapkowicki"
+  },
+  {
+    "nazwa": "Zgierz",
+    "wojewodztwo": "łódzkie",
+    "powiat": "zgierski"
+  },
+  {
+    "nazwa": "Zgorzelec",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "zgorzelecki"
+  },
+  {
+    "nazwa": "Zielona Góra",
+    "wojewodztwo": "lubuskie",
+    "powiat": "Zielona Góra"
+  },
+  {
+    "nazwa": "Ząbki",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "wołomiński"
+  },
+  {
+    "nazwa": "Ząbkowice Śląskie",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "ząbkowicki"
+  },
+  {
+    "nazwa": "Złotoryja",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "złotoryjski"
+  },
+  {
+    "nazwa": "Łańcut",
+    "wojewodztwo": "podkarpackie",
+    "powiat": "łańcucki"
+  },
+  {
+    "nazwa": "Łomża",
+    "wojewodztwo": "podlaskie",
+    "powiat": "Łomża"
+  },
+  {
+    "nazwa": "Łowicz",
+    "wojewodztwo": "łódzkie",
+    "powiat": "łowicki"
+  },
+  {
+    "nazwa": "Łuków",
+    "wojewodztwo": "lubelskie",
+    "powiat": "łukowski"
+  },
+  {
+    "nazwa": "Łódź",
+    "wojewodztwo": "łódzkie",
+    "powiat": "Łódź"
+  },
+  {
+    "nazwa": "Łęczna",
+    "wojewodztwo": "lubelskie",
+    "powiat": "łęczyński"
+  },
+  {
+    "nazwa": "Śrem",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "śremski"
+  },
+  {
+    "nazwa": "Środa Wielkopolska",
+    "wojewodztwo": "wielkopolskie",
+    "powiat": "średzki"
+  },
+  {
+    "nazwa": "Świdnica",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "świdnicki"
+  },
+  {
+    "nazwa": "Świdnik",
+    "wojewodztwo": "lubelskie",
+    "powiat": "świdnicki"
+  },
+  {
+    "nazwa": "Świebodzice",
+    "wojewodztwo": "dolnośląskie",
+    "powiat": "świdnicki"
+  },
+  {
+    "nazwa": "Świebodzin",
+    "wojewodztwo": "lubuskie",
+    "powiat": "świebodziński"
+  },
+  {
+    "nazwa": "Świecie",
+    "wojewodztwo": "kujawsko-pomorskie",
+    "powiat": "świecki"
+  },
+  {
+    "nazwa": "Świnoujście",
+    "wojewodztwo": "zachodniopomorskie",
+    "powiat": "Świnoujście"
+  },
+  {
+    "nazwa": "Świętochłowice",
+    "wojewodztwo": "śląskie",
+    "powiat": "Świętochłowice"
+  },
+  {
+    "nazwa": "Żagań",
+    "wojewodztwo": "lubuskie",
+    "powiat": "żagański"
+  },
+  {
+    "nazwa": "Żary",
+    "wojewodztwo": "lubuskie",
+    "powiat": "żarski"
+  },
+  {
+    "nazwa": "Żory",
+    "wojewodztwo": "śląskie",
+    "powiat": "Żory"
+  },
+  {
+    "nazwa": "Żyrardów",
+    "wojewodztwo": "mazowieckie",
+    "powiat": "żyrardowski"
+  }
+]

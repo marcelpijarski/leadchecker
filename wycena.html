@@ -231,57 +231,38 @@
               </small>
               </div>
 
-              <div class="pole-formularza pole-pelne">
+              <div class="pole-formularza pole-pelne miejscowosc-autocomplete">
                 <label for="city">
                   Miasto
                   <span class="wymagane">*</span>
                 </label>
 
-                <input
-                  type="text"
-                  id="city"
-                  name="Miasto"
-                  list="cityList"
-                  placeholder="Np. Warszawa"
-                  autocomplete="address-level2"
-                  required
-                >
+                <div class="miejscowosc-pole">
+                  <input
+                    type="text"
+                    id="city"
+                    name="Miasto"
+                    placeholder="Np. Warszawa"
+                    autocomplete="off"
+                    required
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-controls="citySuggestions"
+                    aria-expanded="false"
+                    aria-activedescendant=""
+                  >
 
-                <datalist id="cityList">
-                  <option value="Warszawa">
-                  <option value="Kraków">
-                  <option value="Wrocław">
-                  <option value="Poznań">
-                  <option value="Gdańsk">
-                  <option value="Gdynia">
-                  <option value="Sopot">
-                  <option value="Łódź">
-                  <option value="Katowice">
-                  <option value="Lublin">
-                  <option value="Szczecin">
-                  <option value="Bydgoszcz">
-                  <option value="Białystok">
-                  <option value="Rzeszów">
-                  <option value="Radom">
-                  <option value="Toruń">
-                  <option value="Kielce">
-                  <option value="Olsztyn">
-                  <option value="Opole">
-                  <option value="Zielona Góra">
-                  <option value="Gliwice">
-                  <option value="Zabrze">
-                  <option value="Częstochowa">
-                  <option value="Bielsko-Biała">
-                  <option value="Płock">
-                  <option value="Koszalin">
-                  <option value="Legnica">
-                  <option value="Wałbrzych">
-                  <option value="Elbląg">
-                  <option value="Gorzów Wielkopolski">
-                </datalist>
+                  <div
+                    id="citySuggestions"
+                    class="miejscowosc-podpowiedzi"
+                    role="listbox"
+                    aria-label="Podpowiedzi miejscowości"
+                    hidden
+                  ></div>
+                </div>
 
-                <small>
-                  Po wybraniu podpowiedzi pole zostanie uzupełnione automatycznie.
+                <small id="cityStatus">
+                  Wpisz co najmniej 2 litery i wybierz miejscowość z listy.
                 </small>
               </div>
 
@@ -1834,6 +1815,6 @@
 
 <script src="script.js"></script>
 <script src="google-places-config.js"></script>
-<script src="estymator.js?v=9"></script>
+<script src="estymator.js?v=10"></script>
 </body>
 </html>
