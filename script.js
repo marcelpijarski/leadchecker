@@ -356,7 +356,20 @@
     };
   }
 
+  function hasGooglePlacesConsent() {
+    return Boolean(
+      window.LeadCheckerConsent &&
+      window.LeadCheckerConsent.has(
+        "googlePlaces"
+      )
+    );
+  }
+
   function loadGooglePlaces() {
+    if (!hasGooglePlacesConsent()) {
+      return Promise.resolve(false);
+    }
+
     const key = String(
       window.LEADCHECKER_GOOGLE_MAPS_KEY || ""
     ).trim();
@@ -591,12 +604,20 @@
       if (!results.length) {
         closeCityList();
 
-        showMessage(
-          "Brak miejscowości w lokalnej bazie. Wybierz podpowiedź Google albo wpisz pełny adres.",
-          "info"
-        );
+        if (hasGooglePlacesConsent()) {
+          showMessage(
+            "Brak miejscowości w lokalnej bazie. Wybierz podpowiedź Google albo wpisz pełny adres.",
+            "info"
+          );
 
-        ensureGoogleAutocomplete();
+          ensureGoogleAutocomplete();
+        } else {
+          showMessage(
+            "Brak miejscowości w lokalnej bazie. Podpowiedzi Google możesz włączyć w ustawieniach cookies.",
+            "info"
+          );
+        }
+
         return;
       }
 
@@ -791,6 +812,43 @@
     googleAvailable =
       await loadGooglePlaces();
 
+    if (
+      !googleAvailable &&
+      !hasGooglePlacesConsent()
+    ) {
+      showMessage(
+        "Możesz wybrać miejscowość z lokalnej listy. Podpowiedzi pełnego adresu Google są wyłączone.",
+        "info"
+      );
+    }
+
+    document.addEventListener(
+      "leadchecker:consent-changed",
+      async function (event) {
+        const nextConsent =
+          event.detail || {};
+
+        if (
+          !nextConsent.googlePlaces ||
+          googleAvailable
+        ) {
+          return;
+        }
+
+        googleAvailable =
+          await loadGooglePlaces();
+
+        if (googleAvailable) {
+          connectGoogleAutocomplete();
+
+          showMessage(
+            "Podpowiedzi pełnego adresu Google zostały włączone.",
+            "success"
+          );
+        }
+      }
+    );
+
     input.addEventListener(
       "input",
       function () {
@@ -823,6 +881,18 @@
           looksLikeFullAddress(value)
         ) {
           closeCityList();
+
+          if (
+            !hasGooglePlacesConsent()
+          ) {
+            showMessage(
+              "Podpowiedzi pełnego adresu Google są wyłączone. Wybierz miejscowość z lokalnej listy albo zmień ustawienia cookies.",
+              "info"
+            );
+
+            return;
+          }
+
           ensureGoogleAutocomplete();
 
           showMessage(

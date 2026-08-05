@@ -201,12 +201,7 @@
     });
 
     state.ratesReady = true;
-
-    console.log(
-      "Pobrano stawki z Google Sheets:",
-      response.rates.length
-    );
-  }
+}
 
   function valueOf(id) {
     const input = qs("#" + id);
@@ -1957,16 +1952,26 @@
     );
   }
 
+  function hasGooglePlacesConsent() {
+    return Boolean(
+      window.LeadCheckerConsent &&
+      window.LeadCheckerConsent.has(
+        "googlePlaces"
+      )
+    );
+  }
+
   function loadGooglePlaces() {
+    if (!hasGooglePlacesConsent()) {
+      return Promise.resolve(false);
+    }
+
     const key = String(
       window.LEADCHECKER_GOOGLE_MAPS_KEY || ""
     ).trim();
 
     if (!key) {
-      console.info(
-        "Brak klucza Google Places. Formularz działa w trybie ręcznym."
-      );
-      return Promise.resolve(false);
+return Promise.resolve(false);
     }
 
     if (
@@ -2033,10 +2038,21 @@
       await loadGooglePlaces();
 
     if (!loaded) {
-      setAddressStatus(
-        "Autouzupełnianie uruchomimy po dodaniu klucza Google Places.",
-        ""
-      );
+      if (!hasGooglePlacesConsent()) {
+        input.placeholder =
+          "Wybierz miasto z listy i uzupełnij adres ręcznie";
+
+        setAddressStatus(
+          "Podpowiedzi pełnego adresu Google są wyłączone. Miasto wybierz z lokalnej listy, a pozostałe dane uzupełnij ręcznie.",
+          ""
+        );
+      } else {
+        setAddressStatus(
+          "Podpowiedzi Google są chwilowo niedostępne. Uzupełnij adres ręcznie.",
+          ""
+        );
+      }
+
       return;
     }
 
@@ -2152,11 +2168,7 @@
   }, 60000);
 
   try {
-    console.log("Wysyłam dane do Apps Script:", payload.action);
-
-    const startTime = performance.now();
-
-    const response = await fetch(SCRIPT_URL, {
+const response = await fetch(SCRIPT_URL, {
       method: "POST",
 
       headers: {
@@ -2169,23 +2181,7 @@
     });
 
     const responseText = await response.text();
-
-    const requestTime = Math.round(
-      performance.now() - startTime
-    );
-
-    console.log(
-      "Apps Script odpowiedział po:",
-      requestTime,
-      "ms"
-    );
-
-    console.log(
-      "Odpowiedź Apps Script:",
-      responseText
-    );
-
-    if (!response.ok) {
+if (!response.ok) {
       throw new Error(
         "Serwer zwrócił błąd HTTP " +
         response.status +
@@ -3210,13 +3206,25 @@ function initPostalCodeFormatting() {
       }
 
       await initCityAutocomplete();
+
+      document.addEventListener(
+        "leadchecker:consent-changed",
+        async event => {
+          const nextConsent =
+            event.detail || {};
+
+          if (
+            nextConsent.googlePlaces &&
+            !state.placesActive
+          ) {
+            await initAddressAutocomplete();
+          }
+        }
+      );
+
       await initAddressAutocomplete();
       prefillAddressFromHero();
-
-      console.log(
-        "Estymator LeadChecker został uruchomiony."
-      );
-    } catch (error) {
+} catch (error) {
       console.error(
         "Błąd uruchamiania estymatora:",
         error

@@ -1,0 +1,360 @@
+.cookies-banner {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+  z-index: 12000;
+}
+
+.cookies-banner[hidden],
+.cookies-overlay[hidden] {
+  display: none;
+}
+
+.cookies-panel {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 26px;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+}
+
+.cookies-copy {
+  max-width: 720px;
+}
+
+.cookies-label {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: #f97316;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cookies-copy h2,
+.cookies-dialog h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 21px;
+  line-height: 1.25;
+}
+
+.cookies-copy p,
+.cookies-dialog-intro,
+.cookies-option-copy p {
+  color: #4b5563;
+  line-height: 1.65;
+}
+
+.cookies-copy p {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+
+.cookies-copy a {
+  color: #1e3a8a;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cookies-actions,
+.cookies-dialog-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cookies-actions {
+  flex-shrink: 0;
+}
+
+.cookies-button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.cookies-button:hover {
+  transform: translateY(-1px);
+}
+
+.cookies-button:focus-visible,
+.cookies-close:focus-visible,
+.ustawienia-cookies-przycisk:focus-visible {
+  outline: 3px solid rgba(249, 115, 22, 0.28);
+  outline-offset: 2px;
+}
+
+.cookies-button-primary {
+  border-color: #f97316;
+  background: #f97316;
+  color: #ffffff;
+}
+
+.cookies-button-primary:hover {
+  background: #ea580c;
+}
+
+.cookies-button-secondary {
+  border-color: #1e3a8a;
+  background: #ffffff;
+  color: #1e3a8a;
+}
+
+.cookies-button-secondary:hover {
+  background: #eff6ff;
+}
+
+.cookies-button-light {
+  border-color: #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+}
+
+.cookies-button-light:hover {
+  background: #f3f4f6;
+}
+
+.cookies-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 13000;
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.62);
+  backdrop-filter: blur(5px);
+}
+
+.cookies-dialog {
+  width: min(680px, 100%);
+  max-height: calc(100vh - 40px);
+  padding: 26px;
+  overflow-y: auto;
+  border: 1px solid #d1d5db;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.35);
+}
+
+.cookies-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.cookies-close {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #f9fafb;
+  color: #111827;
+  font: inherit;
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cookies-dialog-intro {
+  margin: 14px 0 20px;
+  font-size: 14px;
+}
+
+.cookies-options {
+  display: grid;
+  gap: 12px;
+}
+
+.cookies-option {
+  min-height: 96px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.cookies-option-copy strong {
+  display: block;
+  color: #111827;
+  font-size: 15px;
+}
+
+.cookies-option-copy p {
+  margin: 5px 0 0;
+  font-size: 13px;
+}
+
+.cookies-option-disabled {
+  background: #f9fafb;
+  opacity: 0.82;
+}
+
+.cookies-status {
+  flex: 0 0 auto;
+  color: #1e3a8a;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.cookies-switch {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  flex: 0 0 auto;
+}
+
+.cookies-switch input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.cookies-switch-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #d1d5db;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cookies-switch-track::after {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+  content: "";
+  transition: transform 0.2s ease;
+}
+
+.cookies-switch input:checked + .cookies-switch-track {
+  background: #f97316;
+}
+
+.cookies-switch input:checked + .cookies-switch-track::after {
+  transform: translateX(22px);
+}
+
+.cookies-switch input:focus-visible + .cookies-switch-track {
+  outline: 3px solid rgba(249, 115, 22, 0.28);
+  outline-offset: 3px;
+}
+
+.cookies-dialog-actions {
+  margin-top: 22px;
+  justify-content: flex-end;
+}
+
+.cookies-dialog-open {
+  overflow: hidden;
+}
+
+.ustawienia-cookies-przycisk {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ustawienia-cookies-przycisk:hover {
+  color: #f97316;
+}
+
+@media (max-width: 900px) {
+  .cookies-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cookies-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .cookies-actions .cookies-button {
+    flex: 1 1 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cookies-banner {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .cookies-panel {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .cookies-copy h2,
+  .cookies-dialog h2 {
+    font-size: 18px;
+  }
+
+  .cookies-actions {
+    display: grid;
+  }
+
+  .cookies-actions .cookies-button {
+    width: 100%;
+  }
+
+  .cookies-overlay {
+    padding: 10px;
+    align-items: end;
+  }
+
+  .cookies-dialog {
+    max-height: calc(100vh - 20px);
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .cookies-option {
+    align-items: flex-start;
+  }
+
+  .cookies-dialog-actions {
+    display: grid;
+  }
+
+  .cookies-dialog-actions .cookies-button {
+    width: 100%;
+  }
+}
