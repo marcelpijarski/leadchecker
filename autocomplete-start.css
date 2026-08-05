@@ -1,0 +1,106 @@
+.start-autocomplete {
+  position: relative;
+}
+
+.start-miejscowosci-lista {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  z-index: 80;
+  max-height: 310px;
+  overflow-y: auto;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(31, 41, 55, 0.18);
+}
+
+.start-miejscowosci-lista[hidden] {
+  display: none;
+}
+
+.start-miejscowosc-opcja {
+  width: 100%;
+  min-height: 58px;
+  padding: 11px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  border: 0;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #1f2937;
+  text-align: left;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.start-miejscowosc-opcja:first-child {
+  border-radius: 11px 11px 0 0;
+}
+
+.start-miejscowosc-opcja:last-child {
+  border-bottom: 0;
+  border-radius: 0 0 11px 11px;
+}
+
+.start-miejscowosc-opcja:hover,
+.start-miejscowosc-opcja:focus-visible,
+.start-miejscowosc-opcja.aktywna {
+  background: #fff7ed;
+  color: #c2410c;
+  outline: none;
+}
+
+.start-miejscowosc-nazwa {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.start-miejscowosc-kontekst {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.start-miejscowosc-opcja.aktywna
+.start-miejscowosc-kontekst {
+  color: #9a3412;
+}
+
+.blad-adresu.blad-adresu-poprawny {
+  color: #15803d;
+}
+
+.blad-adresu.blad-adresu-info {
+  color: #4b5563;
+}
+
+body.lokalne-miasta-otwarte
+.pac-container {
+  display: none !important;
+}
+
+.pac-container {
+  z-index: 4000 !important;
+  border-radius: 12px;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 20px 45px rgba(31, 41, 55, 0.18);
+}
+
+@media (max-width: 600px) {
+  .start-miejscowosci-lista {
+    max-height: 250px;
+  }
+
+  .start-miejscowosc-opcja {
+    min-height: 55px;
+    padding: 10px 14px;
+  }
+}

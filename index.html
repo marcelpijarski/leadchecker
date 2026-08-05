@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Bezpłatna wycena nieruchomości | LeadChecker</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="autocomplete-start.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -40,25 +41,37 @@
                 <div class="karta-wyceny">
                     <span class="karta-etykieta">Bezpłatna wycena nieruchomości</span>
 
-                    <h1>Sprawdź orientacyjna wartość swojej nieruchomości</h1>
+                    <h1>Sprawdź orientacyjną wartość swojej nieruchomości</h1>
 
                     <p>Wpisz adres, a następnie uzupełnij podstawowe informacje
                       o nieruchomości i prześlij zgłoszenie do analizy.</p>
 
                      <form class="formularz-adresu" id="formularzAdresu">
                     <label for="adresNieruchomosci">
-                        Adres nieruchomości
+                        Miejscowość lub pełny adres
                     </label>
 
-                    <div class="pole-adresu">
+                    <div class="pole-adresu start-autocomplete">
                         <input
                         type="text"
                         id="adresNieruchomosci"
                         name="adres"
-                        placeholder="Np. Warszawa, Marszałkowska 10"
+                        placeholder="Np. Opole albo Warszawa, Marszałkowska 10"
                         autocomplete="off"
+                        role="combobox"
+                        aria-autocomplete="list"
+                        aria-expanded="false"
+                        aria-controls="heroCitySuggestions"
+                        aria-activedescendant=""
                         required
                         >
+
+                        <div
+                        id="heroCitySuggestions"
+                        class="start-miejscowosci-lista"
+                        role="listbox"
+                        hidden
+                        ></div>
 
                         <input
                         type="hidden"
