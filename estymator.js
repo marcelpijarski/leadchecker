@@ -2042,7 +2042,7 @@
     state.placesActive = true;
 
     input.placeholder =
-      "Np. Milejowice, Radomska 67";
+      "Wpisz miasto i ulicę, np. Opole, Ozimska 10";
 
     const autocomplete =
       new google.maps.places.Autocomplete(
@@ -2137,7 +2137,7 @@
     });
 
     setAddressStatus(
-      "Wpisz miejscowość i adres w jednym polu, na przykład Milejowice, Radomska 67. Jeśli wybierzesz tylko miejscowość, brakujące dane uzupełnisz poniżej.",
+      "Wpisz miasto i ulicę, a następnie wybierz adres z podpowiedzi.",
       ""
     );
   }
