@@ -1984,6 +1984,7 @@
       const params =
         new URLSearchParams({
           key: key,
+          loading: "async",
           libraries: "places",
           language: "pl",
           region: "PL",

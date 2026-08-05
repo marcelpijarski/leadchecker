@@ -377,7 +377,8 @@
       const script = document.createElement("script");
       const params = new URLSearchParams({
         key: key,
-        libraries: "places",
+        loading: "async",
+          libraries: "places",
         language: "pl",
         region: "PL",
         v: "weekly"
