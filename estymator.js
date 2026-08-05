@@ -10,19 +10,15 @@
 
   const RATES = {
     apartment: {
-      fallback: 12000,
       cities: {}
     },
 
     house: {
-      fallback: 9000,
-      plotFallback: 400,
       cities: {},
       plotCities: {}
     },
 
     plot: {
-      fallback: 400,
       cities: {}
     }
   };
@@ -50,6 +46,8 @@
     formattedAddress: "",
     addressAutofill: false,
     cityDatabaseSelected: false,
+    ratesReady: false,
+    individualEstimate: false,
     progressStage: 1
   };
 
@@ -108,45 +106,106 @@
       .trim();
   }
 
-  function averageRate(rates, fallback) {
-    const values = Object.values(rates)
-      .map(Number)
-      .filter(value => {
-        return Number.isFinite(value) && value > 0;
-      });
-
-    if (!values.length) {
-      return Number(fallback);
-    }
-
-    return values.reduce((sum, value) => {
-      return sum + value;
-    }, 0) / values.length;
-  }
-
-  function resolveRate(rates, city, fallback) {
+  function resolveRate(rates, city, propertyLabel) {
     const cityKey = normalizeCity(city);
     const direct = Number(rates[cityKey]);
 
     if (Number.isFinite(direct) && direct > 0) {
       return {
+        found: true,
         rate: direct,
-        source: "stawka przypisana do miasta"
+        source:
+          "Cennik Google Sheets, " +
+          propertyLabel
       };
     }
 
-    const hasRates = Object.values(rates).some(value => {
-      const number = Number(value);
+    return {
+      found: false,
+      rate: 0,
+      source:
+        "Brak stawki w Cenniku Google Sheets, " +
+        propertyLabel
+    };
+  }
 
-      return Number.isFinite(number) && number > 0;
+  function clearRateMaps() {
+    RATES.apartment.cities = {};
+    RATES.house.cities = {};
+    RATES.house.plotCities = {};
+    RATES.plot.cities = {};
+  }
+
+  async function loadRates() {
+    clearRateMaps();
+    state.ratesReady = false;
+
+    const response = await request({
+      action: "getRates"
     });
 
-    return {
-      rate: averageRate(rates, fallback),
-      source: hasRates
-        ? "średnia stawek innych miast"
-        : "stawka domyślna"
-    };
+    if (
+      !response ||
+      response.status !== "rates_loaded" ||
+      !Array.isArray(response.rates)
+    ) {
+      throw new Error(
+        response && response.message
+          ? response.message
+          : "Nie udało się pobrać cennika."
+      );
+    }
+
+    response.rates.forEach(item => {
+      const cityKey = normalizeCity(
+        item && item.city
+      );
+
+      if (!cityKey) {
+        return;
+      }
+
+      const apartment =
+        Number(item.apartment);
+      const house =
+        Number(item.house);
+      const plot =
+        Number(item.plot);
+
+      if (
+        Number.isFinite(apartment) &&
+        apartment > 0
+      ) {
+        RATES.apartment.cities[cityKey] =
+          apartment;
+      }
+
+      if (
+        Number.isFinite(house) &&
+        house > 0
+      ) {
+        RATES.house.cities[cityKey] =
+          house;
+      }
+
+      if (
+        Number.isFinite(plot) &&
+        plot > 0
+      ) {
+        RATES.house.plotCities[cityKey] =
+          plot;
+
+        RATES.plot.cities[cityKey] =
+          plot;
+      }
+    });
+
+    state.ratesReady = true;
+
+    console.log(
+      "Pobrano stawki z Google Sheets:",
+      response.rates.length
+    );
   }
 
   function valueOf(id) {
@@ -454,6 +513,12 @@
   }
 
   function calculate(city) {
+    if (!state.ratesReady) {
+      throw new Error(
+        "Cennik nie został jeszcze pobrany. Odśwież stronę i spróbuj ponownie."
+      );
+    }
+
     validateYear();
 
     if (state.type === "apartment") {
@@ -500,10 +565,20 @@
       const rateData = resolveRate(
         RATES.apartment.cities,
         city,
-        RATES.apartment.fallback
+        "mieszkanie"
       );
 
+      if (!rateData.found) {
+        return {
+          individual: true,
+          value: 0,
+          rate: 0,
+          source: rateData.source
+        };
+      }
+
       return {
+        individual: false,
         value:
           area *
           rateData.rate *
@@ -547,14 +622,44 @@
       const houseRate = resolveRate(
         RATES.house.cities,
         city,
-        RATES.house.fallback
+        "dom"
       );
 
       const plotRate = resolveRate(
         RATES.house.plotCities,
         city,
-        RATES.house.plotFallback
+        "działka przy domu"
       );
+
+      if (
+        !houseRate.found ||
+        (plot > 0 && !plotRate.found)
+      ) {
+        const missingSources = [];
+
+        if (!houseRate.found) {
+          missingSources.push(
+            houseRate.source
+          );
+        }
+
+        if (
+          plot > 0 &&
+          !plotRate.found
+        ) {
+          missingSources.push(
+            plotRate.source
+          );
+        }
+
+        return {
+          individual: true,
+          value: 0,
+          rate: 0,
+          source:
+            missingSources.join("; ")
+        };
+      }
 
       const buildingValue =
         area * houseRate.rate;
@@ -563,13 +668,21 @@
         plot * plotRate.rate;
 
       return {
+        individual: false,
         value:
           (buildingValue + plotValue) *
           standardMultiplier() *
           extrasMultiplier(),
 
         rate: houseRate.rate,
-        source: houseRate.source
+        source:
+          plot > 0
+            ? (
+                houseRate.source +
+                "; " +
+                plotRate.source
+              )
+            : houseRate.source
       };
     }
 
@@ -584,10 +697,20 @@
       const rateData = resolveRate(
         RATES.plot.cities,
         city,
-        RATES.plot.fallback
+        "działka"
       );
 
+      if (!rateData.found) {
+        return {
+          individual: true,
+          value: 0,
+          rate: 0,
+          source: rateData.source
+        };
+      }
+
       return {
+        individual: false,
         value: area * rateData.rate,
         rate: rateData.rate,
         source: rateData.source
@@ -2156,6 +2279,7 @@
     state.max = 0;
     state.cityRate = 0;
     state.rateSource = "";
+    state.individualEstimate = false;
     state.lead = null;
 
     setVisible(
@@ -2335,11 +2459,19 @@
           const estimate =
             calculate(city);
 
+          state.individualEstimate =
+            Boolean(
+              estimate.individual
+            );
+
           if (
-            !Number.isFinite(
-              estimate.value
-            ) ||
-            estimate.value <= 0
+            !state.individualEstimate &&
+            (
+              !Number.isFinite(
+                estimate.value
+              ) ||
+              estimate.value <= 0
+            )
           ) {
             throw new Error(
               "Nie udało się obliczyć wartości nieruchomości."
@@ -2347,24 +2479,32 @@
           }
 
           state.value =
-            Math.round(
-              estimate.value
-            );
+            state.individualEstimate
+              ? 0
+              : Math.round(
+                  estimate.value
+                );
 
           state.min =
-            Math.round(
-              state.value * 0.9
-            );
+            state.individualEstimate
+              ? 0
+              : Math.round(
+                  state.value * 0.9
+                );
 
           state.max =
-            Math.round(
-              state.value * 1.1
-            );
+            state.individualEstimate
+              ? 0
+              : Math.round(
+                  state.value * 1.1
+                );
 
           state.cityRate =
-            Math.round(
-              estimate.rate
-            );
+            state.individualEstimate
+              ? 0
+              : Math.round(
+                  estimate.rate
+                );
 
           state.rateSource =
             estimate.source;
@@ -2375,8 +2515,15 @@
           };
 
           price.innerHTML =
-            "<h3>Analiza została przygotowana</h3>" +
-            "<p>Podaj dane kontaktowe i potwierdź adres email, aby przekazać zgłoszenie do zespołu LeadChecker.</p>";
+            state.individualEstimate
+              ? (
+                  "<h3>Ta lokalizacja wymaga indywidualnej wyceny</h3>" +
+                  "<p>Nie mamy jeszcze stawki dla tej miejscowości i rodzaju nieruchomości. Podaj dane kontaktowe i potwierdź adres email, a zgłoszenie zostanie przekazane do zespołu LeadChecker.</p>"
+                )
+              : (
+                  "<h3>Analiza została przygotowana</h3>" +
+                  "<p>Podaj dane kontaktowe i potwierdź adres email, aby przekazać zgłoszenie do zespołu LeadChecker.</p>"
+                );
 
           setVisible(
             result,
@@ -2440,7 +2587,10 @@
         );
 
         try {
-          if (state.value <= 0) {
+          if (
+            state.value <= 0 &&
+            !state.individualEstimate
+          ) {
             throw new Error(
               "Najpierw oblicz wartość nieruchomości."
             );
@@ -2464,6 +2614,10 @@
                 cityRate: state.cityRate,
                 rateSource:
                   state.rateSource,
+                individualEstimate:
+                  state.individualEstimate
+                    ? "Tak"
+                    : "Nie",
                 reason: reasonValue(),
                 consentEstimate:
                   contact.consentEstimate,
@@ -3044,6 +3198,16 @@ function initPostalCodeFormatting() {
       initCalculator();
       initLeadForm();
       initVerifyForm();
+
+      try {
+        await loadRates();
+      } catch (error) {
+        console.error(
+          "Nie udało się pobrać cennika:",
+          error
+        );
+      }
+
       await initCityAutocomplete();
       await initAddressAutocomplete();
       prefillAddressFromHero();
