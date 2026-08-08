@@ -388,13 +388,15 @@
 
     return new Promise(function (resolve) {
       const script = document.createElement("script");
+      const callbackName = "__leadCheckerHeroGoogleReady";
       const params = new URLSearchParams({
         key: key,
         loading: "async",
-          libraries: "places",
+        libraries: "places",
         language: "pl",
         region: "PL",
-        v: "weekly"
+        v: "weekly",
+        callback: callbackName
       });
 
       script.src =
@@ -403,15 +405,15 @@
       script.async = true;
       script.defer = true;
 
-      script.addEventListener("load", function () {
+      window[callbackName] = function () {
         resolve(Boolean(
           window.google &&
           window.google.maps &&
           window.google.maps.places
         ));
-      });
+      };
 
-      script.addEventListener("error", function () {
+script.addEventListener("error", function () {
         resolve(false);
       });
 

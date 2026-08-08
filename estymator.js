@@ -1987,6 +1987,9 @@ return Promise.resolve(false);
       const script =
         document.createElement("script");
 
+      const callbackName =
+        "__leadCheckerEstimatorGoogleReady";
+
       const params =
         new URLSearchParams({
           key: key,
@@ -1994,7 +1997,8 @@ return Promise.resolve(false);
           libraries: "places",
           language: "pl",
           region: "PL",
-          v: "weekly"
+          v: "weekly",
+          callback: callbackName
         });
 
       script.src =
@@ -2003,18 +2007,15 @@ return Promise.resolve(false);
       script.async = true;
       script.defer = true;
 
-      script.addEventListener(
-        "load",
-        () => {
-          resolve(Boolean(
-            window.google &&
-            window.google.maps &&
-            window.google.maps.places
-          ));
-        }
-      );
+      window[callbackName] = function () {
+        resolve(Boolean(
+          window.google &&
+          window.google.maps &&
+          window.google.maps.places
+        ));
+      };
 
-      script.addEventListener(
+script.addEventListener(
         "error",
         () => {
           resolve(false);
