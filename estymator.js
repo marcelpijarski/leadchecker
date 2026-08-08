@@ -48,7 +48,8 @@
     cityDatabaseSelected: false,
     ratesReady: false,
     individualEstimate: false,
-    progressStage: 1
+    progressStage: 1,
+    metaLeadTracked: false
   };
 
   const qs = (selector, scope = document) => {
@@ -2763,6 +2764,29 @@ if (!response.ok) {
     );
   }
 
+  function trackMetaLead() {
+    if (state.metaLeadTracked) {
+      return;
+    }
+
+    if (
+      !window.LeadCheckerMeta ||
+      typeof window.LeadCheckerMeta.track !==
+        "function"
+    ) {
+      return;
+    }
+
+    const tracked =
+      window.LeadCheckerMeta.track(
+        "Lead"
+      );
+
+    if (tracked) {
+      state.metaLeadTracked = true;
+    }
+  }
+
   function initVerifyForm() {
     const form =
       qs("#verifyForm");
@@ -2832,6 +2856,7 @@ if (!response.ok) {
             response.status ===
               "verified"
           ) {
+            trackMetaLead();
             showResult();
             return;
           }

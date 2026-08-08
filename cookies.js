@@ -2,21 +2,24 @@
   "use strict";
 
   const STORAGE_KEY = "leadchecker_cookie_consent";
-  const CONSENT_VERSION = "1";
+  const CONSENT_VERSION = "2";
 
   let consent = readConsent();
   let banner = null;
   let overlay = null;
   let dialog = null;
   let googleCheckbox = null;
+  let marketingCheckbox = null;
   let lastFocused = null;
+  let metaPixelInitialized = false;
 
   function isValidConsent(value) {
     return Boolean(
       value &&
       value.version === CONSENT_VERSION &&
       value.necessary === true &&
-      typeof value.googlePlaces === "boolean"
+      typeof value.googlePlaces === "boolean" &&
+      typeof value.marketing === "boolean"
     );
   }
 
@@ -48,7 +51,10 @@
         consent &&
         consent.googlePlaces
       ),
-      marketing: false,
+      marketing: Boolean(
+        consent &&
+        consent.marketing
+      ),
       updatedAt:
         consent &&
         consent.updatedAt
@@ -64,6 +70,117 @@
 
     return Boolean(
       getConsent()[category]
+    );
+  }
+
+  function ensureMetaPixel() {
+    if (!has("marketing")) {
+      return false;
+    }
+
+    if (!window.fbq) {
+      const fbq = function () {
+        if (fbq.callMethod) {
+          fbq.callMethod.apply(
+            fbq,
+            arguments
+          );
+        } else {
+          fbq.queue.push(arguments);
+        }
+      };
+
+      window.fbq = fbq;
+      window._fbq = fbq;
+
+      fbq.push = fbq;
+      fbq.loaded = true;
+      fbq.version = "2.0";
+      fbq.queue = [];
+    }
+
+    if (!metaPixelInitialized) {
+      window.fbq(
+        "init",
+        "1399435898726409"
+      );
+
+      metaPixelInitialized = true;
+    }
+
+    const existingScript =
+      document.querySelector(
+        'script[data-leadchecker-meta-pixel="true"]'
+      );
+
+    if (!existingScript) {
+      const script =
+        document.createElement("script");
+
+      script.async = true;
+      script.src =
+        "https://connect.facebook.net/en_US/fbevents.js";
+
+      script.setAttribute(
+        "data-leadchecker-meta-pixel",
+        "true"
+      );
+
+      document.head.appendChild(script);
+    }
+
+    return true;
+  }
+
+  function trackMetaEvent(
+    eventName,
+    parameters
+  ) {
+    if (
+      !has("marketing") ||
+      !ensureMetaPixel()
+    ) {
+      return false;
+    }
+
+    if (
+      !eventName ||
+      typeof eventName !== "string"
+    ) {
+      return false;
+    }
+
+    if (
+      parameters &&
+      typeof parameters === "object"
+    ) {
+      window.fbq(
+        "track",
+        eventName,
+        parameters
+      );
+    } else {
+      window.fbq(
+        "track",
+        eventName
+      );
+    }
+
+    return true;
+  }
+
+  function startMetaPageView() {
+    if (!has("marketing")) {
+      return;
+    }
+
+    if (!ensureMetaPixel()) {
+      return;
+    }
+
+    window.fbq(
+      "track",
+      "PageView"
     );
   }
 
@@ -106,7 +223,11 @@
   }
 
   function openSettings() {
-    if (!overlay || !googleCheckbox) {
+    if (
+      !overlay ||
+      !googleCheckbox ||
+      !marketingCheckbox
+    ) {
       return;
     }
 
@@ -115,6 +236,9 @@
 
     googleCheckbox.checked =
       has("googlePlaces");
+
+    marketingCheckbox.checked =
+      has("marketing");
 
     overlay.hidden = false;
     document.body.classList.add(
@@ -126,7 +250,10 @@
     }, 30);
   }
 
-  function saveConsent(googlePlaces) {
+  function saveConsent(
+    googlePlaces,
+    marketing
+  ) {
     const previous = consent;
 
     consent = {
@@ -135,7 +262,9 @@
       googlePlaces: Boolean(
         googlePlaces
       ),
-      marketing: false,
+      marketing: Boolean(
+        marketing
+      ),
       updatedAt:
         new Date().toISOString()
     };
@@ -155,9 +284,27 @@
     );
 
     if (
+      consent.marketing &&
+      (
+        !previous ||
+        !previous.marketing
+      )
+    ) {
+      startMetaPageView();
+    }
+
+    if (
       previous &&
-      previous.googlePlaces &&
-      !consent.googlePlaces
+      (
+        (
+          previous.googlePlaces &&
+          !consent.googlePlaces
+        ) ||
+        (
+          previous.marketing &&
+          !consent.marketing
+        )
+      )
     ) {
       window.setTimeout(function () {
         window.location.reload();
@@ -181,8 +328,8 @@
       '<div class="cookies-panel">' +
         '<div class="cookies-copy">' +
           '<span class="cookies-label">Prywatność</span>' +
-          '<h2>Ustawienia cookies i usług Google</h2>' +
-          '<p>Serwis zapisuje Twoją decyzję w pamięci przeglądarki. Podpowiedzi pełnego adresu Google uruchamiamy dopiero po uzyskaniu zgody. Niezbędne funkcje strony działają zawsze. <a href="polityka-prywatnosci.html">Polityka prywatności</a></p>' +
+          '<h2>Ustawienia prywatności i cookies</h2>' +
+          '<p>Serwis zapisuje Twoją decyzję w pamięci przeglądarki. Opcjonalne usługi Google i Meta uruchamiamy dopiero po uzyskaniu odpowiedniej zgody. Niezbędne funkcje strony działają zawsze. <a href="polityka-prywatnosci.html">Polityka prywatności</a></p>' +
         '</div>' +
         '<div class="cookies-actions">' +
           '<button type="button" class="cookies-button cookies-button-light" data-cookie-reject>Tylko niezbędne</button>' +
@@ -227,13 +374,16 @@
               '<span class="cookies-switch-track" aria-hidden="true"></span>' +
             '</span>' +
           '</label>' +
-          '<div class="cookies-option cookies-option-disabled">' +
+          '<label class="cookies-option" for="cookiesMarketing">' +
             '<div class="cookies-option-copy">' +
               '<strong>Marketingowe</strong>' +
-              '<p>Meta Pixel nie jest jeszcze aktywny. Po jego wdrożeniu serwis poprosi o nową decyzję.</p>' +
+              '<p>Włącza Meta Pixel do pomiaru odwiedzin i skuteczności reklam, w tym zdarzeń PageView oraz Lead.</p>' +
             '</div>' +
-            '<span class="cookies-status">Nieaktywne</span>' +
-          '</div>' +
+            '<span class="cookies-switch">' +
+              '<input type="checkbox" id="cookiesMarketing">' +
+              '<span class="cookies-switch-track" aria-hidden="true"></span>' +
+            '</span>' +
+          '</label>' +
         '</div>' +
         '<div class="cookies-dialog-actions">' +
           '<button type="button" class="cookies-button cookies-button-light" data-cookie-close>Anuluj</button>' +
@@ -259,6 +409,11 @@
         "#cookiesGooglePlaces"
       );
 
+    marketingCheckbox =
+      overlay.querySelector(
+        "#cookiesMarketing"
+      );
+
     banner
       .querySelector(
         "[data-cookie-reject]"
@@ -266,7 +421,7 @@
       .addEventListener(
         "click",
         function () {
-          saveConsent(false);
+          saveConsent(false, false);
         }
       );
 
@@ -277,7 +432,7 @@
       .addEventListener(
         "click",
         function () {
-          saveConsent(true);
+          saveConsent(true, true);
         }
       );
 
@@ -316,7 +471,8 @@
         "click",
         function () {
           saveConsent(
-            googleCheckbox.checked
+            googleCheckbox.checked,
+            marketingCheckbox.checked
           );
         }
       );
@@ -406,6 +562,10 @@
 
     if (consent) {
       hideBanner();
+
+      if (consent.marketing) {
+        startMetaPageView();
+      }
     } else {
       showBanner();
     }
@@ -420,6 +580,11 @@
     get: getConsent,
     has: has,
     openSettings: openSettings
+  };
+
+  window.LeadCheckerMeta = {
+    pixelId: "1399435898726409",
+    track: trackMetaEvent
   };
 
   if (
