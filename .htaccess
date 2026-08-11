@@ -1,0 +1,60 @@
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{THE_REQUEST} \s/+index\.html(?:[?\s]) [NC]
+RewriteRule ^index\.html$ https://leadchecker.pl/ [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+wycena\.html(?:[?\s]) [NC]
+RewriteRule ^wycena\.html$ https://leadchecker.pl/wycena [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+agenci\.html(?:[?\s]) [NC]
+RewriteRule ^agenci\.html$ https://leadchecker.pl/agenci [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+kontakt\.html(?:[?\s]) [NC]
+RewriteRule ^kontakt\.html$ https://leadchecker.pl/kontakt [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+polityka-prywatnosci\.html(?:[?\s]) [NC]
+RewriteRule ^polityka-prywatnosci\.html$ https://leadchecker.pl/polityka-prywatnosci [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+dziekujemy\.html(?:[?\s]) [NC]
+RewriteRule ^dziekujemy\.html$ https://leadchecker.pl/dziekujemy [R=301,L,NE]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/$
+RewriteRule ^(.+)/$ https://leadchecker.pl/$1 [R=301,L,NE]
+
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} !^leadchecker\.pl$ [NC]
+RewriteRule ^ https://leadchecker.pl%{REQUEST_URI} [R=301,L,NE]
+
+RewriteRule ^wycena$ wycena.html [L]
+RewriteRule ^agenci$ agenci.html [L]
+RewriteRule ^kontakt$ kontakt.html [L]
+RewriteRule ^polityka-prywatnosci$ polityka-prywatnosci.html [L]
+RewriteRule ^dziekujemy$ dziekujemy.html [L]
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  <Files "polityka-prywatnosci.html">
+    Header always set X-Robots-Tag "noindex, follow"
+  </Files>
+
+  <Files "dziekujemy.html">
+    Header always set X-Robots-Tag "noindex, nofollow"
+  </Files>
+
+  <Files "404.html">
+    Header always set X-Robots-Tag "noindex, nofollow"
+  </Files>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
