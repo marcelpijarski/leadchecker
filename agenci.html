@@ -1,11 +1,42 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="cookies.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Leady dla agentów nieruchomości | LeadChecker</title>
+  <meta name="description" content="LeadChecker łączy agentów i biura nieruchomości ze zgłoszeniami właścicieli zainteresowanych sprzedażą nieruchomości i kontaktem ze specjalistą.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://leadchecker.pl/agenci">
+
+  <meta property="og:locale" content="pl_PL">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="LeadChecker">
+  <meta property="og:title" content="Leady dla agentów nieruchomości | LeadChecker">
+  <meta property="og:description" content="LeadChecker łączy agentów i biura nieruchomości ze zgłoszeniami właścicieli zainteresowanych sprzedażą nieruchomości i kontaktem ze specjalistą.">
+  <meta property="og:url" content="https://leadchecker.pl/agenci">
+  <meta property="og:image" content="https://leadchecker.pl/assets/logo.webp">
+  <meta property="og:image:alt" content="LeadChecker">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Leady dla agentów nieruchomości | LeadChecker">
+  <meta name="twitter:description" content="LeadChecker łączy agentów i biura nieruchomości ze zgłoszeniami właścicieli zainteresowanych sprzedażą nieruchomości i kontaktem ze specjalistą.">
+  <meta name="twitter:image" content="https://leadchecker.pl/assets/logo.webp">
+
+  <meta name="theme-color" content="#1E3A8A">
+
+  <link rel="icon" href="assets/logo.webp" type="image/webp">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cookies.css">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://leadchecker.pl/agenci#webpage","url":"https://leadchecker.pl/agenci","name":"Dla agentów nieruchomości","description":"LeadChecker łączy agentów i biura nieruchomości ze zgłoszeniami właścicieli zainteresowanych sprzedażą nieruchomości i kontaktem ze specjalistą.","isPartOf":{"@id":"https://leadchecker.pl/#website"},"about":{"@id":"https://leadchecker.pl/#organization"},"inLanguage":"pl-PL"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Strona główna","item":"https://leadchecker.pl/"},{"@type":"ListItem","position":2,"name":"Dla agentów nieruchomości","item":"https://leadchecker.pl/agenci"}]}]}
+  </script>
 </head>
 <body>
    <header class="naglowek">
@@ -631,7 +662,7 @@
           <span>
             Wyrażam zgodę na kontakt w celu przedstawienia warunków
             współpracy i potwierdzam zapoznanie się z
-            <a href="/polityka-prywatnosci/">
+            <a href="polityka-prywatnosci.html">
               polityką prywatności
             </a>.
           </span>
@@ -730,7 +761,6 @@
 
     <div class="stopka-dokumenty">
       <a href="polityka-prywatnosci.html">Polityka prywatności</a>
-      <a href="regulamin.html">Regulamin</a>
       <button type="button" class="ustawienia-cookies-przycisk" data-cookie-settings>Ustawienia cookies</button>
     </div>
   </div>
@@ -738,5 +768,21 @@
 
 <script src="cookies.js"></script>
 <script src="script.js"></script>    
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const nextField = document.querySelector('input[name="_next"]');
+
+    if (!nextField) {
+      return;
+    }
+
+    if (window.location.hostname === "leadchecker.pl" || window.location.hostname === "www.leadchecker.pl") {
+      nextField.value = "https://leadchecker.pl/dziekujemy";
+      return;
+    }
+
+    nextField.value = "https://marcelpijarski.github.io/leadchecker/dziekujemy.html";
+  });
+</script>
 </body>
 </html>

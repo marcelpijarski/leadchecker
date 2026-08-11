@@ -853,7 +853,7 @@
           ? "Tak"
           : "Nie",
       consentDate: new Date().toISOString(),
-      privacyVersion: "2026-08-03"
+      privacyVersion: "2026-08-08"
     };
   }
 
@@ -2514,15 +2514,8 @@ if (!response.ok) {
           };
 
           price.innerHTML =
-            state.individualEstimate
-              ? (
-                  "<h3>Ta lokalizacja wymaga indywidualnej wyceny</h3>" +
-                  "<p>Nie mamy jeszcze stawki dla tej miejscowości i rodzaju nieruchomości. Podaj dane kontaktowe i potwierdź adres email, a zgłoszenie zostanie przekazane do zespołu LeadChecker.</p>"
-                )
-              : (
-                  "<h3>Analiza została przygotowana</h3>" +
-                  "<p>Podaj dane kontaktowe i potwierdź adres email, aby przekazać zgłoszenie do zespołu LeadChecker.</p>"
-                );
+            "<h3>Dokończ zgłoszenie</h3>" +
+            "<p>Podaj dane kontaktowe i potwierdź adres email. Po weryfikacji zgłoszenia zespół LeadChecker zajmie się jego dalszą obsługą.</p>";
 
           setVisible(
             result,
@@ -2735,10 +2728,22 @@ if (!response.ok) {
         "Dziękujemy za zgłoszenie";
     }
 
+    const partnerConsent =
+      Boolean(
+        state.lead &&
+        state.lead.consentPartners === "Tak"
+      );
+
     price.innerHTML =
-      "<h3>Adres email został potwierdzony</h3>" +
-      "<p>Twoje zgłoszenie oraz dane nieruchomości zostały przekazane do zespołu LeadChecker.</p>" +
-      "<p>Skontaktujemy się z Tobą w sprawie dalszych szczegółów.</p>";
+      partnerConsent
+        ? (
+            "<h3>Adres email został potwierdzony</h3>" +
+            "<p>Dziękujemy za zgłoszenie. Skontaktujemy Cię z najlepiej dopasowanym biurem nieruchomości, które obsługuje Twój obszar.</p>"
+          )
+        : (
+            "<h3>Adres email został potwierdzony</h3>" +
+            "<p>Dziękujemy za zgłoszenie. Zespół LeadChecker skontaktuje się z Tobą w sprawie dalszej obsługi zgłoszenia.</p>"
+          );
 
     setVisible(
       result,
